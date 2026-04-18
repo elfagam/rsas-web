@@ -1,0 +1,19 @@
+{
+  "name": "rsas-web",
+  "version": "1.0.0",
+  "description": "Landing page for rsas website",
+  "repository": {
+    "type": "git",
+    "url": "rsas-web"
+  },
+  "license": "ISC",
+  "author": "elfagam",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "compile:sass": "sass sass/style.scss css/style.css --watch"
+  },
+  "devDependencies": {
+    "sass": "^1.99.0"
+  }
+}
