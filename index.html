@@ -1,73 +1,642 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
 
     <!-- <link rel="stylesheet" href="css/icon-font.css"> -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="shortcut icon" type="image/png" href="img/favicon.png">
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="shortcut icon" type="image/png" href="img/favicon.png" />
 
     <title>RSUD Aloei Saboe</title>
-</head>
-<body>
+  </head>
+  <body>
     <header class="header">
-        <div class="header__logo-box">
-            <img src="img/logo-white.png" alt="Logo" class="header__logo">
-        </div>
-        <div class="header__text-box">
-            <h1 class="heading-primary">
-                <span class="heading-primary__main">RSUD ALOEI SABOE</span>
-                <span class="heading-primary__sub">MENJADI LEBIH BAIK UNTUK SEMUA</span>
-            </h1>
+      <nav class="navbar">
+        <img src="img/logo-white.png" alt="Logo" class="navbar__logo" />
 
-            <a href="#" class="btn btn__white btn__animated">Lihat Layanan Kami</a>
+        <input type="checkbox" class="navbar__checkbox" id="navi-toggle" />
+        <label for="navi-toggle" class="navbar__button">
+          <span class="navbar__icon">&nbsp;</span>
+        </label>
 
-        </div>
+        <ul class="navbar__list">
+          <li class="navbar__item">
+            <a href="#" class="navbar__link">Home</a>
+          </li>
+          <li class="navbar__item">
+            <a href="#" class="navbar__link">Berita</a>
+          </li>
+          <li class="navbar__item">
+            <a href="#" class="navbar__link">Profil</a>
+          </li>
+          <li class="navbar__item">
+            <a href="#" class="navbar__link">Layanan</a>
+          </li>
+          <li class="navbar__item">
+            <a href="#" class="navbar__link">Informasi</a>
+          </li>
+          <li class="navbar__item">
+            <a href="#" class="navbar__link">Pendidikan dan Pelatihan</a>
+          </li>
+          <li class="navbar__item">
+            <a href="#" class="navbar__link">Zona Integritas</a>
+          </li>
+          <li class="navbar__item">
+            <a href="#" class="navbar__link">Pengumuman</a>
+          </li>
+          <li class="navbar__item">
+            <a href="#" class="navbar__link">Hubungi Kami</a>
+          </li>
+          <li class="navbar__item"><a href="#" class="navbar__link">FAQ</a></li>
+        </ul>
+      </nav>
+
+      <div class="header__text-box">
+        <h1 class="heading-primary">
+          <span class="heading-primary__main">RS ALOEI SABOE</span>
+          <span class="heading-primary__sub"
+            >MENJADI LEBIH BAIK UNTUK SEMUA</span
+          >
+          <p class="heading-primary__description">
+            RSUD Prof.DR.H.Aloei Saboe merupakan rumah sakit rujukan utama di
+            Gorontalo, berkomitmen memberikan pelayanan kesehatan terbaik dengan
+            fasilitas modern dan tenaga medis profesional.
+          </p>
+        </h1>
+
+        <a href="#sejarah" class="btn btn__white btn__animated"
+          >Baca Selengkapnya</a
+        >
+      </div>
     </header>
 
+    <section class="section-services" id="services">
+      <div class="services-wrapper">
+        <div class="service-card" data-aos="fade-up">
+          <i class="fa-solid fa-hospital-user service-card__icon"></i>
+          <h3 class="service-card__title">IGD 24 Jam Terpadu</h3>
+          <p class="service-card__text">
+            Pelayanan gawat darurat cepat tanggap dengan fasilitas medis terkini
+            dan tenaga ahli bersertifikat.
+          </p>
+        </div>
+
+        <div class="service-card" data-aos="fade-up" data-aos-delay="150">
+          <i class="fa-solid fa-heart-pulse service-card__icon"></i>
+          <h3 class="service-card__title">Pusat Jantung Terpadu</h3>
+          <p class="service-card__text">
+            Penanganan komprehensif kardiovaskular didukung oleh dokter
+            spesialis dan alat kateterisasi jantung.
+          </p>
+        </div>
+
+        <div class="service-card" data-aos="fade-up" data-aos-delay="300">
+          <i class="fa-solid fa-microscope service-card__icon"></i>
+          <h3 class="service-card__title">Laboratorium Canggih</h3>
+          <p class="service-card__text">
+            Hasil diagnosa cepat dan akurat sebagai penunjang utama kesembuhan
+            pasien, beroperasi penuh 24 jam.
+          </p>
+        </div>
+      </div>
+
+      <div class="services-action">
+        <a href="#" class="btn-outline">LIHAT SELURUH LAYANAN</a>
+      </div>
+    </section>
+
+    <section class="section-schedule" id="jadwal-dokter">
+      <div class="u-center-text u-margin-bottom-medium">
+        <h2 class="heading-secondary">Jadwal Dokter Spesialis</h2>
+        <p class="schedule-subtitle">
+          Pilih tanggal atau cari nama dokter untuk melihat jadwal praktik.
+        </p>
+      </div>
+
+      <div class="schedule-filter" data-aos="fade-up">
+        <div class="filter-group">
+          <label for="filter-date" class="filter-label"
+            ><i class="fa-regular fa-calendar"></i> Pilih Tanggal</label
+          >
+          <input type="date" id="filter-date" class="filter-input" />
+        </div>
+
+        <div class="filter-group">
+          <label for="filter-search" class="filter-label"
+            ><i class="fa-solid fa-magnifying-glass"></i> Cari Dokter /
+            Poli</label
+          >
+          <input
+            type="text"
+            id="filter-search"
+            class="filter-input"
+            placeholder="Contoh: dr. Andi atau Kandungan..."
+          />
+        </div>
+      </div>
+
+      <div class="schedule-grid" data-aos="fade-up" data-aos-delay="200">
+        <div class="doctor-card">
+          <div class="doctor-card__header">
+            <div class="doctor-card__avatar">
+              <i class="fa-solid fa-user-doctor"></i>
+            </div>
+            <div class="doctor-card__info">
+              <h3 class="doctor-card__name">dr. H. Mohammad Ali, Sp.PD</h3>
+              <span class="doctor-card__specialty">Penyakit Dalam</span>
+            </div>
+          </div>
+          <div class="doctor-card__body">
+            <div class="schedule-time">
+              <i class="fa-regular fa-clock"></i>
+              <span>08:00 - 12:00 WITA</span>
+            </div>
+            <div class="schedule-status status-available">
+              <i class="fa-solid fa-circle-check"></i> Tersedia
+            </div>
+          </div>
+          <a href="#" class="doctor-card__btn">Daftar Antrean</a>
+        </div>
+
+        <div class="doctor-card">
+          <div class="doctor-card__header">
+            <div class="doctor-card__avatar">
+              <i class="fa-solid fa-user-doctor"></i>
+            </div>
+            <div class="doctor-card__info">
+              <h3 class="doctor-card__name">dr. Siti Aminah, Sp.A</h3>
+              <span class="doctor-card__specialty">Klinik Anak</span>
+            </div>
+          </div>
+          <div class="doctor-card__body">
+            <div class="schedule-time">
+              <i class="fa-regular fa-clock"></i>
+              <span>13:00 - 16:00 WITA</span>
+            </div>
+            <div class="schedule-status status-full">
+              <i class="fa-solid fa-circle-xmark"></i> Kuota Penuh
+            </div>
+          </div>
+          <button class="doctor-card__btn doctor-card__btn--disabled" disabled>
+            Kuota Penuh
+          </button>
+        </div>
+      </div>
+    </section>
+
     <section class="section-history" id="sejarah">
-        <div class="u-center-text u-margin-bottom-big">
-            <h2 class="heading-secondary">Sejarah Singkat RSAS</h2>
+      <div class="u-center-text u-margin-bottom-big">
+        <h2 class="heading-secondary">Sejarah Singkat RS ALOEI SABOE</h2>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline__item timeline__item--left" data-aos="fade-right">
+          <div class="timeline__content">
+            <span class="timeline__year">1926</span>
+            <p class="timeline__text">Pembangunan RSU Kotamadya Gorontalo</p>
+          </div>
         </div>
+
+        <div
+          class="timeline__item timeline__item--right"
+          data-aos="fade-left"
+          data-aos-delay="200"
+        >
+          <div class="timeline__content">
+            <span class="timeline__year">1929</span>
+            <p class="timeline__text">
+              Pemanfaatan dengan nama RSU KOTAMADYA GORONTALO
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="timeline__item timeline__item--left"
+          data-aos="fade-right"
+          data-aos-delay="400"
+        >
+          <div class="timeline__content">
+            <span class="timeline__year">1979</span>
+            <p class="timeline__text">
+              Berubah nama menjadi RSU Prof. Dr. H. Aloei Saboe Gorontalo
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="timeline__item timeline__item--right"
+          data-aos="fade-left"
+          data-aos-delay="600"
+        >
+          <div class="timeline__content">
+            <span class="timeline__year">2005</span>
+            <p class="timeline__text">
+              Ditetapkan sebagai Rumah Sakit Kelas B & BLUD
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section class="section-services" id="layanan">
-        
-        <div class="u-center-text u-margin-bottom-big">
-            <h2 class="heading-secondary">Layanan Unggulan RSAS</h2>
+    <section class="section-news" id="berita" data-aos="fade-up">
+      <div class="u-center-text u-margin-bottom-big">
+        <h2 class="heading-secondary">Berita Terkini</h2>
+      </div>
+
+      <div class="swiper news-slider">
+        <div class="swiper-wrapper">
+          <div class="swiper-slide">
+            <div class="news-card">
+              <img
+                src="../img/nat-1.jpg"
+                alt="Berita 1"
+                class="news-card__img"
+                loading="lazy"
+              />
+              <div class="news-card__content">
+                <h3 class="news-card__title">
+                  Lapor Gratifikasi: Kenali dan Hindari
+                </h3>
+                <p class="news-card__text">
+                  RSUD Prof. Dr. H. Aloei Saboe berkomitmen penuh dalam
+                  pemberantasan korupsi. Segera laporkan jika Anda melihat
+                  pelanggaran...
+                </p>
+                <a href="#" class="news-card__link"
+                  >baca selengkapnya &raquo;</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="swiper-slide">
+            <div class="news-card">
+              <img
+                src="../img/nat-2.jpg"
+                alt="Berita 2"
+                class="news-card__img"
+                loading="lazy"
+              />
+              <div class="news-card__content">
+                <h3 class="news-card__title">
+                  Peresmian Gedung Rawat Inap Baru
+                </h3>
+                <p class="news-card__text">
+                  Untuk meningkatkan kenyamanan pasien, manajemen RSAS telah
+                  meresmikan fasilitas rawat inap VIP dengan standar
+                  internasional...
+                </p>
+                <a href="#" class="news-card__link"
+                  >baca selengkapnya &raquo;</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="swiper-slide">
+            <div class="news-card">
+              <img
+                src="../img/nat-3.jpg"
+                alt="Berita 3"
+                class="news-card__img"
+                loading="lazy"
+              />
+              <div class="news-card__content">
+                <h3 class="news-card__title">
+                  Jadwal Poliklinik Selama Cuti Bersama
+                </h3>
+                <p class="news-card__text">
+                  Pemberitahuan kepada seluruh masyarakat Gorontalo mengenai
+                  penyesuaian jadwal dokter spesialis selama masa libur
+                  nasional...
+                </p>
+                <a href="#" class="news-card__link"
+                  >baca selengkapnya &raquo;</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <div class="swiper-slide">
+            <div class="news-card">
+              <img
+                src="../img/nat-4.jpg"
+                alt="Berita 4"
+                class="news-card__img"
+                loading="lazy"
+              />
+              <div class="news-card__content">
+                <h3 class="news-card__title">Edukasi Kesehatan Jantung</h3>
+                <p class="news-card__text">
+                  Ikuti seminar awam gratis mengenai pentingnya menjaga pola
+                  makan untuk mencegah serangan jantung usia muda...
+                </p>
+                <a href="#" class="news-card__link"
+                  >baca selengkapnya &raquo;</a
+                >
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="services-grid">
-            
-            <div class="service-card">
-                <div class="service-card__icon">🏥</div>
-                <h3 class="heading-tertiary u-margin-bottom-small">IGD 24 Jam Terpadu</h3>
-                <p class="service-card__text">
-                    Pelayanan gawat darurat cepat tanggap dengan fasilitas medis terkini dan tenaga ahli bersertifikat.
-                </p>
-            </div>
+        <div class="swiper-pagination"></div>
 
-            <div class="service-card">
-                <div class="service-card__icon">❤️</div>
-                <h3 class="heading-tertiary u-margin-bottom-small">Pusat Jantung Terpadu</h3>
-                <p class="service-card__text">
-                    Penanganan komprehensif kardiovaskular didukung oleh dokter spesialis dan alat kateterisasi jantung.
-                </p>
-            </div>
-
-            <div class="service-card">
-                <div class="service-card__icon">🔬</div>
-                <h3 class="heading-tertiary u-margin-bottom-small">Laboratorium Canggih</h3>
-                <p class="service-card__text">
-                    Hasil diagnosa cepat dan akurat sebagai penunjang utama kesembuhan pasien, beroperasi penuh 24 jam.
-                </p>
-            </div>
-
-        </div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+      </div>
     </section>
 
-</body>
+    <section class="section-informasi" id="informasi">
+      <div class="u-center-text u-margin-bottom-big">
+        <h2 class="heading-secondary">Informasi</h2>
+      </div>
+
+      <div class="informasi-wrapper">
+        <div class="info-card" data-aos="fade-right">
+          <h3 class="info-card__title">Layanan Antrian Online</h3>
+          <div class="info-card__body">
+            <img
+              src="../img/nat-9.jpg"
+              alt="Aplikasi Mobile JKN"
+              class="info-card__img"
+              loading="lazy"
+            />
+          </div>
+        </div>
+
+        <div class="info-card" data-aos="fade-left" data-aos-delay="200">
+          <h3 class="info-card__title">Syarat Pendaftaran Pasien</h3>
+          <div class="info-card__body">
+            <img
+              src="../img/nat-8.jpg"
+              alt="Syarat Pendaftaran Pasien"
+              class="info-card__img"
+              loading="lazy"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="ikm-banner" data-aos="zoom-in" data-aos-delay="400">
+        <h3 class="ikm-banner__title">
+          INDIKATOR KEPUASAN MASYARAKAT (IKM)<br />TAHUN 2025
+        </h3>
+        <p class="ikm-banner__score">87,38%</p>
+      </div>
+    </section>
+
+    <section class="section-mitra" id="mitra">
+      <div class="u-center-text">
+        <div class="mitra-header">
+          <span class="mitra-header__line"></span>
+          <h2 class="mitra-header__title">MITRA</h2>
+          <span class="mitra-header__line"></span>
+        </div>
+        <p class="mitra-subtitle">
+          RSUD Prof. Dr. H. Aloei Saboe telah bekerja sama dengan :
+        </p>
+      </div>
+
+      <div class="swiper mitra-slider">
+        <div class="swiper-wrapper align-center">
+          <div class="swiper-slide">
+            <img
+              src="../img/bpjs.png"
+              alt="BPJS Kesehatan"
+              class="mitra-logo"
+            />
+          </div>
+          <div class="swiper-slide">
+            <img
+              src="../img/bpsj-ketenagakerjaan.png"
+              alt="BPJS Ketenagakerjaan"
+              class="mitra-logo"
+            />
+          </div>
+          <div class="swiper-slide">
+            <img
+              src="img/logo-prudential.png"
+              alt="Prudential"
+              class="mitra-logo"
+            />
+          </div>
+          <div class="swiper-slide">
+            <img
+              src="img/logo-mandiri.png"
+              alt="Mandiri Inhealth"
+              class="mitra-logo"
+            />
+          </div>
+          <div class="swiper-slide">
+            <img src="img/logo-taspen.png" alt="Taspen" class="mitra-logo" />
+          </div>
+          <div class="swiper-slide">
+            <img
+              src="img/logo-jasaraharja.png"
+              alt="Jasa Raharja"
+              class="mitra-logo"
+            />
+          </div>
+        </div>
+
+        <div class="swiper-button-next mitra-next"></div>
+        <div class="swiper-button-prev mitra-prev"></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="statistics" data-aos="fade-up">
+        <div class="u-center-text u-margin-bottom-medium">
+          <h3 class="statistics__main-title">STATISTIK PENGUNJUNG</h3>
+        </div>
+
+        <div class="statistics__grid">
+          <div class="stat-card">
+            <p class="stat-card__label">Hari Ini</p>
+            <h2 class="stat-card__number">48</h2>
+            <p class="stat-card__comparison stat-card__comparison--down">
+              Vs Kemarin <i class="fa-solid fa-caret-down"></i> 11%
+            </p>
+          </div>
+
+          <div class="stat-card">
+            <p class="stat-card__label">Minggu Ini</p>
+            <h2 class="stat-card__number">535</h2>
+            <p class="stat-card__comparison stat-card__comparison--down">
+              Vs Minggu Kemarin <i class="fa-solid fa-caret-down"></i> 26%
+            </p>
+          </div>
+
+          <div class="stat-card">
+            <p class="stat-card__label">Bulan Ini</p>
+            <h2 class="stat-card__number">584</h2>
+            <p class="stat-card__comparison stat-card__comparison--up">
+              Vs Bulan Kemarin <i class="fa-solid fa-caret-up"></i> 82%
+            </p>
+          </div>
+
+          <div class="stat-card">
+            <p class="stat-card__label">Tahun Ini</p>
+            <h2 class="stat-card__number">5931</h2>
+            <p class="stat-card__comparison stat-card__comparison--down">
+              Vs Tahun Kemarin <i class="fa-solid fa-caret-down"></i> 72%
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer__decoration"></div>
+
+      <div class="footer__grid">
+        <div class="footer__col">
+          <img
+            src="img/logo-white.png"
+            alt="Logo RSUD Aloei Saboe"
+            class="footer__logo"
+          />
+          <h3 class="footer__hospital-name">
+            RSUD PROF. DR. H. ALOEI SABOE<br />KOTA GORONTALO
+          </h3>
+          <p class="footer__text">
+            <i class="fa-solid fa-location-dot u-margin-right-small"></i>
+            Jl. Prof. Dr. H. Aloei Saboe No. 92<br />
+            Kelurahan Wongkaditi Timur - 96122
+          </p>
+        </div>
+
+        <div class="footer__col">
+          <h3 class="footer__title">KONTAK</h3>
+          <ul class="footer__list">
+            <li class="footer__list-item">
+              <a href="#" class="footer__link">
+                <i class="fa-brands fa-whatsapp footer__icon"></i> 0811-4333-446
+                (Chat Only)
+              </a>
+            </li>
+            <li class="footer__list-item">
+              <a
+                href="mailto:rsudaloeisaboe@gorontalokota.go.id"
+                class="footer__link"
+              >
+                <i class="fa-solid fa-envelope footer__icon"></i>
+                rsudaloeisaboe@gorontalokota.go.id
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer__col">
+          <h3 class="footer__title">SOCIAL MEDIA</h3>
+          <div class="footer__socials">
+            <a href="#" class="footer__social-link" aria-label="Instagram"
+              ><i class="fa-brands fa-instagram"></i
+            ></a>
+            <a href="#" class="footer__social-link" aria-label="TikTok"
+              ><i class="fa-brands fa-tiktok"></i
+            ></a>
+            <a href="#" class="footer__social-link" aria-label="Facebook"
+              ><i class="fa-brands fa-facebook-f"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer__copyright">
+        <p>
+          &copy; 2026 RSUD Prof. Dr. H. Aloei Saboe. Menjadi Lebih Baik Untuk
+          Semua.
+        </p>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 1000, // Durasi animasi 1 detik agar terasa elegan (tidak terlalu cepat)
+        once: true, // Animasi hanya diputar sekali saat pertama kali di-scroll
+        offset: 100, // Jarak pemicu animasi (dalam piksel) sebelum elemen terlihat
+      });
+    </script>
+    <script>
+      // Inisialisasi Swiper Berita
+      const swiper = new Swiper(".news-slider", {
+        // Parameter Dasar
+        loop: true, // Berita berputar kembali ke awal setelah habis
+        spaceBetween: 30, // Jarak antar kartu
+
+        // Auto-Play Ramah Pengguna
+        autoplay: {
+          delay: 4000, // Geser otomatis setiap 4 detik
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true, // BERHENTI SAAT DISENTUH MOUSE (Sangat Penting!)
+        },
+
+        // Navigasi
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+
+        // RESPONSIVE BREAKPOINTS (Kecerdasan Tata Letak)
+        breakpoints: {
+          // Ketika layar >= 320px (HP)
+          320: {
+            slidesPerView: 1, // Tampilkan 1 kartu saja
+          },
+          // Ketika layar >= 768px (Tablet)
+          768: {
+            slidesPerView: 2, // Tampilkan 2 kartu
+          },
+          // Ketika layar >= 1024px (Desktop)
+          1024: {
+            slidesPerView: 3, // Tampilkan 3 kartu persis seperti desain PDF!
+          },
+        },
+      });
+
+      // Inisialisasi Swiper KHUSUS MITRA
+      const swiperMitra = new Swiper(".mitra-slider", {
+        loop: true,
+        autoplay: {
+          delay: 2000, // Bergeser setiap 2 detik
+          disableOnInteraction: false,
+        },
+        navigation: {
+          nextEl: ".mitra-next",
+          prevEl: ".mitra-prev",
+        },
+        // Responsif: Menampilkan jumlah logo sesuai lebar layar
+        breakpoints: {
+          320: { slidesPerView: 2, spaceBetween: 20 }, // Di HP: tampil 2 logo
+          768: { slidesPerView: 4, spaceBetween: 30 }, // Di Tablet: tampil 4 logo
+          1024: { slidesPerView: 5, spaceBetween: 40 }, // Di Desktop: tampil 5 logo berdampingan
+        },
+      });
+    </script>
+  </body>
 </html>

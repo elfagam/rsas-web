@@ -11,6 +11,16 @@ html {
   font-size: 62.5%;
 }
 
+body {
+  font-family: "Lato", sans-serif;
+  font-weight: 400;
+  color: #313e17;
+  background-color: #f8f3e1;
+  line-height: 1.6;
+  padding: 3rem;
+  box-sizing: border-box;
+}
+
 .u-center-text {
   text-align: center;
 }
@@ -21,16 +31,6 @@ html {
 
 .u-margin-bottom-big {
   margin-bottom: 8rem;
-}
-
-body {
-  font-family: "Lato", sans-serif;
-  font-weight: 400;
-  color: #313E17;
-  background-color: #F8F3E1;
-  line-height: 1.6;
-  padding: 3rem;
-  box-sizing: border-box;
 }
 
 @keyframes moveInLeft {
@@ -103,22 +103,146 @@ body {
   text-align: center;
 }
 
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: transparent; /* Navbar transparan agar terlihat latar belakang hero */
+  position: absolute; /* Posisi absolut agar bisa menempel di atas hero */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10; /* Pastikan navbar berada di atas elemen lain */
+}
+.navbar__checkbox {
+  display: none;
+}
+.navbar__button {
+  display: none;
+  cursor: pointer;
+}
+.navbar__logo {
+  height: 3.5rem;
+}
+.navbar__list {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+@media (max-width: 37.5em) {
+  .navbar__list {
+    gap: 1.5rem; /* Jarak antar item dirampingkan untuk layar kecil */
+  }
+}
+.navbar__link:link, .navbar__link:visited {
+  font-size: 1.3rem;
+  font-weight: 400;
+  color: #f8f3e1;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 700;
+  transition: all 0.2s;
+  padding-bottom: 2px solid transparent; /* Ini untuk membuat ruang untuk border bawah saat hover */
+  transition: all 0.2s;
+}
+.navbar__link:hover, .navbar__link:active {
+  color: #313e17;
+  border-bottom: 2px solid #2fa084; /* Efek garis bawah saat hover */
+  transform: translate(-2px, -2px) scale(1.05); /* Efek sedikit melayang dan membesar saat hover */
+}
+@media (max-width: 37.5em) {
+  .navbar {
+    display: block; /* Tampilkan tombol hamburger pada layar kecil */
+    position: relative;
+  }
+}
+@media (max-width: 56.25em) {
+  .navbar__button {
+    display: block;
+    position: relative;
+    z-index: 2000;
+    margin-top: 1rem;
+    margin-right: 3rem;
+    margin-left: auto; /* Menempel ke kanan */
+  }
+  .navbar__icon {
+    position: relative;
+  }
+  .navbar__icon, .navbar__icon::before, .navbar__icon::after {
+    content: "";
+    width: 2.5rem;
+    height: 2px;
+    background-color: #f8f3e1;
+    display: inline-block;
+    position: absolute;
+    left: 0;
+    transition: all 0.2s;
+    transform-origin: center;
+  }
+  .navbar__icon::before, .navbar__icon::after {
+    content: "";
+  }
+  .navbar__icon::before {
+    top: -0.8rem;
+  }
+  .navbar__icon::after {
+    top: 0.8rem;
+  }
+  .navbar__list {
+    position: fixed;
+    top: 0;
+    left: -100%; /* Sembunyi di kiri */
+    height: 100vh;
+    width: 100%;
+    background-color: rgba(47, 160, 132, 0.95);
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+  }
+  .navbar__link:link, .navbar__link:visited {
+    font-size: 2rem;
+    color: #f8f3e1;
+  }
+  .navbar {
+    /* AKSI SAAT DICENTANG (MENU MUNCUL) */
+  }
+  .navbar__checkbox:checked ~ .navbar__list {
+    left: 0;
+  }
+  .navbar {
+    /* ANIMASI HAMBURGER MENJADI HURUF X (Brilian!) */
+  }
+  .navbar__checkbox:checked ~ .navbar__button .navbar__icon {
+    background-color: transparent;
+  }
+  .navbar__checkbox:checked ~ .navbar__button .navbar__icon::before {
+    transform: rotate(45deg);
+    top: 0;
+  }
+  .navbar__checkbox:checked ~ .navbar__button .navbar__icon::after {
+    transform: rotate(-45deg);
+    top: 0;
+  }
+}
+
 .heading-primary {
-  color: #2FA084;
+  color: #2fa084;
   text-transform: uppercase;
   margin-bottom: 6rem;
 }
 .heading-primary__main {
   display: block;
   font-size: 4rem;
-  font-weight: 400;
-  color: #F8F3E1;
+  font-weight: 700;
+  color: #f8f3e1;
   letter-spacing: 2rem;
 }
-@media (max-width: 37.5em) {
+@media (max-width: 56.25em) {
   .heading-primary__main {
-    font-size: 3rem; /* Huruf dikecilkan */
-    letter-spacing: 0.5rem; /* Jarak huruf dirapatkan agar bisa 1 baris */
+    letter-spacing: 0.8rem; /* Jarak huruf dirapatkan agar bisa 1 baris */
   }
 }
 .heading-primary__main {
@@ -129,36 +253,134 @@ body {
   display: block;
   font-size: 2rem;
   font-weight: 400;
-  color: #F8F3E1;
-  letter-spacing: 1rem;
+  color: #f8f3e1;
+  letter-spacing: 0.5rem;
   animation-name: moveInRight;
   animation-duration: 3s;
   animation-timing-function: ease-out;
 }
-@media (max-width: 37.5em) {
+@media (max-width: 56.25em) {
   .heading-primary__sub {
-    font-size: 1.4rem;
-    letter-spacing: 0.2rem;
+    font-size: 1.2rem;
+    letter-spacing: 0.4rem;
     margin-top: 1rem; /* Memberi sedikit jarak bernapas dari teks atasnya */
   }
 }
+.heading-primary__description {
+  font-size: 1.5rem;
+  color: #313e17;
+  text-transform: none;
+  letter-spacing: 0.5px;
+  line-height: 1.8;
+  margin-top: 4rem;
+  max-width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+@media (max-width: 56.25em) {
+  .heading-primary__description {
+    font-size: 1.2rem; /* Ukuran teks deskripsi dirampingkan untuk layar kecil */
+    max-width: 100%; /* Lebar maksimal dihapus agar bisa menyesuaikan layar */
+    padding: 0 1rem; /* Memberi sedikit padding agar tidak mepet ke tepi layar */
+  }
+}
+
+.section-news {
+  background-color: white;
+  padding-top: 5rem;
+  padding-bottom: 15rem;
+  margin-top: -10rem; /* Angka ini bisa Anda sesuaikan (misal -8rem atau -12rem) sampai pas */
+  position: relative;
+  z-index: 10;
+}
+
+/* Membatasi lebar slider agar tidak mentok ke ujung layar */
+.news-slider {
+  max-width: 120rem;
+  padding-bottom: 5rem; /* Ruang untuk titik pagination */
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.news-card {
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  overflow: hidden; /* Mencegah gambar keluar dari border melengkung */
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.05);
+  height: 100%; /* Agar semua kartu tingginya sama rata */
+  display: flex;
+  flex-direction: column;
+}
+.news-card__img {
+  width: 100%;
+  height: 22rem; /* Tinggi paksa untuk gambar */
+  object-fit: cover; /* THE MAGIC: Gambar dipotong otomatis, anti gepeng! */
+}
+.news-card__content {
+  padding: 3rem;
+  flex: 1; /* Mendorong tombol 'baca selengkapnya' ke bagian paling bawah */
+  display: flex;
+  flex-direction: column;
+}
+.news-card__title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2f4f4f;
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+}
+.news-card__text {
+  font-size: 1.4rem;
+  color: #777;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  flex: 1;
+}
+.news-card__link:link, .news-card__link:visited {
+  font-size: 1.2rem;
+  color: #d38c44; /* Warna cokelat/oranye dari desain Anda */
+  text-decoration: none;
+  text-transform: lowercase;
+  font-weight: 700;
+  transition: all 0.3s;
+  align-self: flex-start; /* Taruh di sebelah kiri */
+}
+.news-card__link:hover, .news-card__link:active {
+  color: #2f4f4f;
+}
+
+/* Kustomisasi Warna Panah & Titik Swiper agar Hijau RSAS */
+:root {
+  --swiper-theme-color: #2f4f4f; /* Ganti dengan $warna-utama Anda */
+}
+
+.section-history {
+  background-color: #f7f7f7;
+  padding: 15rem 0;
+}
 
 .heading-secondary {
-  font-size: 3.5rem;
+  font-size: clamp(2.5rem, 3vw + 1rem, 3rem);
   text-transform: uppercase;
   font-weight: 700;
   display: inline-block;
-  color: #2FA084;
-  margin-bottom: 4rem;
+  color: #2fa084;
+  text-align: center;
+  margin-bottom: 8rem;
 }
 @media (max-width: 37.5em) {
   .heading-secondary {
-    font-size: 2.5rem; /* Ukuran huruf dirampingkan */
+    margin-bottom: 3rem; /* Jarak bawah dirampingkan */
+  }
+}
+@media (max-width: 56.25em) {
+  .heading-secondary {
+    font-size: 2rem; /* Ukuran huruf dirampingkan */
     margin-bottom: 3rem; /* Jarak bawah dirampingkan */
   }
 }
 .heading-secondary {
-  background-image: linear-gradient(to right, #2FA084, #6FCF97);
+  background-image: linear-gradient(to right, #2fa084, #6fcf97);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -169,22 +391,121 @@ body {
   transform: skewY(2deg) skewX(15deg) scale(1.1);
   text-shadow: 0.5rem 1rem 2rem rgba(0, 0, 0, 0.2);
 }
-.heading-secondary .heading-tertiary {
-  font-size: 1.6rem;
+
+.heading-tertiary {
+  font-size: clamp(1.4rem, 1.5vw + 0.5rem, 2rem);
   font-weight: 700;
   text-transform: uppercase;
-  color: #313E17;
+  color: #313e17;
 }
 
-.section-history {
-  /* Ini hanya kavling sementara, kita beri tinggi 20vh agar terlihat ada jarak */
-  height: 20vh;
-  background-color: #F8F3E1;
+.timeline {
+  position: relative;
+  max-width: 100rem;
+  margin: 0 auto;
+}
+.timeline::after {
+  content: "";
+  position: absolute;
+  width: 4px;
+  background-color: #6fcf97;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  margin-left: -2px; /* Setengah dari lebar garis untuk benar-benar di tengah */
+}
+@media (max-width: 56.25em) {
+  .timeline::after {
+    left: 3rem;
+  }
+}
+.timeline__item {
+  padding: 1rem 4rem;
+  position: relative;
+  background-color: inherit;
+  width: 50%;
+}
+.timeline__item::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: #6fcf97;
+  border: 4px solid #f8f3e1;
+  top: 2.5rem;
+  border-radius: 50%;
+  z-index: 1;
+}
+.timeline__item--left {
+  left: 0;
+}
+.timeline__item--left::after {
+  right: -10px; /* Setengah dari lebar titik untuk benar-benar di tepi */
+}
+.timeline__item--right {
+  left: 50%;
+}
+.timeline__item--right::after {
+  left: -10px; /* Setengah dari lebar titik untuk benar-benar di tepi */
+}
+@media (max-width: 56.25em) {
+  .timeline__item {
+    width: 100%;
+    padding-left: 7rem;
+    padding-right: 2rem;
+    margin-bottom: 2rem;
+  }
+  .timeline__item--left, .timeline__item--right {
+    left: 0;
+  }
+  .timeline__item--left::after, .timeline__item--right::after {
+    left: 2rem; /* Setengah dari lebar titik untuk benar-benar di tepi */
+  }
+}
+.timeline__content {
+  padding: 3rem;
+  background-color: #fff;
+  position: relative;
+  border-radius: 8px;
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.timeline__content:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 2.5rem 4rem rgba(0, 0, 0, 0.15);
+}
+.timeline__year {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #2fa084;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.timeline__text {
+  font-size: 1.5rem;
+  color: #313e17;
+  line-height: 1.8;
 }
 
 .section-services {
-  padding: 15rem 3rem;
-  background-color: #f4f4f4; /* Abu-abu sangat terang agar kontras dengan kartu putih */
+  margin-top: -15rem; /* Sesuaikan angka ini (misal -12rem atau -18rem) agar tumpang tindihnya pas */
+  position: relative;
+  z-index: 20;
+  padding-bottom: 10rem;
+}
+
+.services-wrapper {
+  max-width: 120rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+}
+@media (max-width: 56.25em) {
+  .services-wrapper {
+    grid-template-columns: 1fr; /* Menumpuk vertikal di HP */
+    margin-top: -5rem; /* Menyesuaikan tarikan ke atas untuk layar kecil */
+  }
 }
 
 .services-grid {
@@ -200,12 +521,12 @@ body {
   font-size: 1.5rem;
   padding: 2.5rem;
   text-align: center;
-  border-radius: 1rem;
+  border-radius: 0.8rem;
   box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.1); /* Bayangan lembut */
   transition: transform 0.3s, box-shadow 0.3s; /* Animasi transisi yang mulus */
 }
 .service-card:hover {
-  transform: translateY(-1.5rem) scale(1.03);
+  transform: translateY(-5px) scale(1.03);
   box-shadow: 0 2.5rem 4rem rgba(0, 0, 0, 0.15);
 }
 .service-card__icon {
@@ -214,6 +535,138 @@ body {
 }
 .service-card__text {
   color: #777;
+}
+
+.services-action {
+  text-align: center;
+  margin-top: 6rem;
+}
+@media (max-width: 56.25em) {
+  .services-action {
+    margin-top: 4rem;
+  }
+}
+
+.section-informasi {
+  position: relative;
+  z-index: 5; /* Pastikan berada di bawah konten tapi di atas latar belakang */
+  background-color: #f8f3e1; /* Warna krem/beige sesuai desain */
+  padding: 12rem 0;
+  overflow: hidden; /* Wajib: Agar garis ombak tidak meluber ke luar layar */
+}
+.section-informasi::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("/img/stacked-peaks-haikei.svg");
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: cover; /* Memaksa garis menutupi seluruh area */
+  opacity: 1; /* Menipiskan garis agar tidak menabrak teks */
+  filter: grayscale(80%);
+  z-index: -1; /* Taruh di lapisan paling dasar */
+}
+
+.informasi-wrapper {
+  position: relative;
+  z-index: 10; /* Menarik konten ke atas melewati garis ombak */
+  max-width: 100rem; /* Sedikit lebih sempit dari layanan agar rapi */
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6rem;
+  margin-bottom: 10rem; /* Jarak menuju banner IKM */
+}
+@media (max-width: 56.25em) {
+  .informasi-wrapper {
+    grid-template-columns: 1fr; /* Jadi 1 kolom bersusun di HP */
+    padding: 0 4rem;
+    gap: 4rem;
+  }
+}
+
+.info-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  text-align: center;
+  border-top: 6px solid #6fcf97; /* Garis aksen hijau manis di atap kartu */
+}
+.info-card__title {
+  background-color: #6fcf97;
+  color: white;
+  padding: 1.5rem;
+  font-size: clamp(1.4rem, 1.5vw, 1.8rem);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.info-card__body {
+  padding: 2rem;
+}
+.info-card__img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px; /* Sudut gambar agak melengkung */
+  object-fit: cover;
+}
+
+/* 5. Desain Banner IKM */
+.ikm-banner {
+  position: relative;
+  z-index: 10;
+  max-width: 80rem; /* Lebar banner IKM dibatasi agar elegan */
+  margin: 0 auto;
+  background-color: rgba(111, 207, 151, 0.15); /* Hijau transparan */
+  border-radius: 50px; /* Bentuk kapsul (pill shape) */
+  padding: 4rem;
+  text-align: center;
+  border: 2px dashed rgba(47, 79, 79, 0.2);
+}
+@media (max-width: 56.25em) {
+  .ikm-banner {
+    margin: 0 3rem;
+    border-radius: 20px; /* Di HP kapsulnya sedikit lebih kotak */
+    padding: 3rem 2rem;
+  }
+}
+.ikm-banner__title {
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  color: #2f4f4f;
+  letter-spacing: 2px;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+.ikm-banner__score {
+  font-size: clamp(5rem, 6vw, 8rem);
+  font-weight: 900;
+  color: #2f4f4f;
+  letter-spacing: -2px; /* Didekatkan agar lebih solid */
+}
+
+.btn-outline:link, .btn-outline:visited {
+  display: inline-block;
+  padding: 1.5rem 4rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none;
+  color: #2f4f4f;
+  background-color: transparent;
+  border: 2px solid #6fcf97;
+  border-radius: 50px; /* Bentuk pil/kapsul bulat */
+  transition: all 0.3s;
+}
+.btn-outline:hover, .btn-outline:active {
+  background-color: #6fcf97;
+  color: #f8f3e1;
+  transform: translateY(-3px);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
 }
 
 .btn:link, .btn:visited {
@@ -227,10 +680,10 @@ body {
   position: relative;
   font-size: 1.6rem;
 }
-@media (max-width: 37.5em) {
+@media (max-width: 56.25em) {
   .btn:link, .btn:visited {
-    padding: 1.2rem 2.5rem; /* Ukuran tombol dirampingkan */
-    font-size: 1.3rem; /* Teks dikecilkan agar muat 1 baris */
+    padding: 1rem 2rem; /* Ukuran tombol dirampingkan */
+    font-size: 1rem; /* Teks dikecilkan agar muat 1 baris */
   }
 }
 .btn:hover {
@@ -242,11 +695,11 @@ body {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
 }
 .btn__white {
-  background-color: #F8F3E1;
-  color: #313E17;
+  background-color: #f8f3e1;
+  color: #313e17;
 }
 .btn__white::after {
-  background-color: #F8F3E1;
+  background-color: #f8f3e1;
 }
 .btn::after {
   content: "";
@@ -267,6 +720,439 @@ body {
 .btn__animated {
   animation: moveInButton 1s ease-out 0.75s;
   animation-fill-mode: backwards;
+}
+
+.footer {
+  background-color: #2f4f4f; /* Hijau Gelap RSAS */
+  color: #f8f3e1; /* Warna teks krem terang agar kontras */
+  position: relative;
+  padding-top: 6rem;
+  /* Garis dekorasi di bagian paling atas footer */
+}
+.footer__decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(90deg, #6fcf97 0%, #d38c44 100%); /* Gradasi Hijau ke Oranye */
+}
+.footer__grid {
+  max-width: 120rem;
+  margin: 0 auto;
+  padding: 0 4rem 6rem 4rem;
+  display: grid;
+  /* Membagi ruang: Kolom 1 lebih lebar (1.5), sisanya sama (1) */
+  grid-template-columns: 1.5fr 1fr 1fr;
+  gap: 6rem;
+  border-bottom: 1px solid rgba(248, 243, 225, 0.1); /* Garis batas tipis */
+}
+@media (max-width: 56.25em) {
+  .footer__grid {
+    grid-template-columns: 1fr; /* Jadi 1 kolom bersusun di HP */
+    gap: 4rem;
+    text-align: center; /* Teks ke tengah di layar kecil */
+  }
+}
+.footer__logo {
+  width: 12rem;
+  margin-bottom: 2rem;
+}
+.footer__hospital-name {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+}
+.footer__text {
+  font-size: 1.4rem;
+  line-height: 1.8;
+  color: rgba(248, 243, 225, 0.8); /* Teks sedikit redup */
+}
+.footer__title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 2.5rem;
+  color: #6fcf97; /* Aksen hijau terang untuk judul */
+}
+.footer__list {
+  list-style: none;
+}
+.footer__list-item {
+  margin-bottom: 1.5rem;
+}
+.footer__link:link, .footer__link:visited {
+  color: rgba(248, 243, 225, 0.8);
+  text-decoration: none;
+  font-size: 1.4rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+}
+@media (max-width: 56.25em) {
+  .footer__link:link, .footer__link:visited {
+    justify-content: center; /* Ikon dan teks ke tengah di HP */
+  }
+}
+.footer__link:hover, .footer__link:active {
+  color: #6fcf97;
+  transform: translateX(5px); /* Efek bergeser sedikit saat di-hover */
+}
+.footer__icon {
+  font-size: 1.8rem;
+  margin-right: 1.5rem;
+  color: #d38c44; /* Ikon warna oranye */
+}
+.footer {
+  /* Lingkaran Ikon Sosial Media */
+}
+.footer__socials {
+  display: flex;
+  gap: 1.5rem;
+}
+@media (max-width: 56.25em) {
+  .footer__socials {
+    justify-content: center;
+  }
+}
+.footer__social-link:link, .footer__social-link:visited {
+  display: inline-block;
+  width: 4rem;
+  height: 4rem;
+  background-color: rgba(248, 243, 225, 0.1);
+  color: #f8f3e1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  transition: all 0.3s;
+}
+.footer__social-link:hover, .footer__social-link:active {
+  background-color: #6fcf97;
+  color: #2f4f4f;
+  transform: translateY(-3px);
+}
+.footer__copyright {
+  text-align: center;
+  padding: 2.5rem 0;
+  font-size: 1.2rem;
+  color: rgba(248, 243, 225, 0.5);
+}
+
+.u-margin-right-small {
+  margin-right: 1rem !important;
+}
+
+.section-mitra {
+  padding: 8rem 0;
+  background-color: white;
+}
+
+.mitra-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding: 0 2rem;
+}
+.mitra-header__line {
+  height: 1px;
+  background-color: #d38c44; /* Warna coklat/oranye dari desain */
+  flex: 0 1 30rem; /* Garis akan memanjang maksimal 300px, tapi bisa menyusut di HP */
+}
+.mitra-header__title {
+  background-color: #d38c44;
+  color: white;
+  padding: 1rem 4rem;
+  border-radius: 50px;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.mitra-subtitle {
+  font-size: 1.6rem;
+  color: #555;
+  margin-bottom: 5rem;
+}
+
+.mitra-slider {
+  max-width: 110rem;
+  padding: 2rem 5rem;
+}
+
+.mitra-logo {
+  width: 100%;
+  max-width: 14rem; /* Batasi besaran logo */
+  height: 6rem; /* Samakan tinggi semua logo */
+  object-fit: contain; /* Agar logo tidak gepeng/terpotong */
+  margin: 0 auto;
+  display: block;
+  opacity: 0.5;
+  transition: all 0.4s ease;
+}
+.mitra-logo:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.mitra-next,
+.mitra-prev {
+  color: #d38c44 !important; /* Ubah panah jadi oranye */
+  transform: scale(0.6); /* Perkecil ukuran panahnya */
+}
+
+.statistics {
+  max-width: 100rem;
+  margin: 5rem auto 0 auto;
+  padding: 4rem;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 30px;
+  border: 1px dashed rgba(47, 79, 79, 0.2);
+}
+.statistics__main-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #2f4f4f;
+  text-transform: uppercase;
+}
+.statistics__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+@media (max-width: 56.25em) {
+  .statistics__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 37.5em) {
+  .statistics__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stat-card {
+  text-align: center;
+  padding: 2rem;
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+}
+.stat-card:last-child {
+  border-right: none;
+}
+@media (max-width: 56.25em) {
+  .stat-card {
+    border-right: none;
+  }
+  .stat-card:nth-child(odd) {
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+  }
+}
+.stat-card__label {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #2f4f4f;
+  margin-bottom: 1rem;
+}
+.stat-card__number {
+  font-size: 4.5rem;
+  font-weight: 800;
+  color: #2f4f4f;
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+.stat-card__comparison {
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.stat-card__comparison--up {
+  color: #6fcf97;
+}
+.stat-card__comparison--down {
+  color: #eb5757;
+}
+
+/* ==================== GAYA JADWAL DOKTER ==================== */
+.section-schedule {
+  padding: 10rem 4rem;
+  background-color: #f8f3e1; /* Latar krem RSAS */
+}
+
+.schedule-subtitle {
+  font-size: 1.6rem;
+  color: #555;
+  margin-top: 1rem;
+}
+
+/* Panel Filter Mengambang */
+.schedule-filter {
+  max-width: 80rem;
+  margin: 0 auto 5rem auto;
+  background-color: white;
+  padding: 3rem;
+  border-radius: 15px;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.05);
+  display: flex;
+  gap: 3rem;
+}
+@media (max-width: 56.25em) {
+  .schedule-filter {
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
+
+.filter-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-label {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #2f4f4f;
+  margin-bottom: 0.8rem;
+}
+.filter-label i {
+  color: #6fcf97;
+  margin-right: 0.5rem;
+}
+
+.filter-input {
+  font-family: inherit;
+  font-size: 1.5rem;
+  padding: 1.2rem 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+.filter-input:focus {
+  outline: none;
+  border-color: #6fcf97;
+  box-shadow: 0 0 0 3px rgba(111, 207, 151, 0.2);
+}
+
+/* Grid Kartu Dokter */
+.schedule-grid {
+  max-width: 120rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(32rem, 1fr)); /* Responsif otomatis tanpa media query! */
+  gap: 3rem;
+}
+
+.doctor-card {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.03);
+  transition: transform 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+.doctor-card:hover {
+  transform: translateY(-5px);
+}
+.doctor-card__header {
+  display: flex;
+  align-items: center;
+  padding: 2rem;
+  background-color: rgba(111, 207, 151, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+.doctor-card__avatar {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  background-color: #6fcf97;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  margin-right: 1.5rem;
+  flex-shrink: 0;
+}
+.doctor-card__name {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #2f4f4f;
+  line-height: 1.3;
+  margin-bottom: 0.4rem;
+}
+.doctor-card__specialty {
+  font-size: 1.3rem;
+  color: #d38c44;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.doctor-card__body {
+  padding: 2rem;
+  flex: 1;
+}
+.doctor-card .schedule-time {
+  font-size: 1.5rem;
+  color: #555;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+.doctor-card .schedule-time i {
+  color: #2f4f4f;
+  margin-right: 1rem;
+  font-size: 1.8rem;
+}
+.doctor-card .schedule-status {
+  font-size: 1.4rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+.doctor-card .schedule-status i {
+  margin-right: 0.8rem;
+}
+.doctor-card .status-available {
+  color: #6fcf97;
+}
+.doctor-card .status-full {
+  color: #eb5757;
+}
+.doctor-card__btn {
+  display: block;
+  text-align: center;
+  padding: 1.5rem;
+  background-color: #2f4f4f;
+  color: white;
+  text-decoration: none;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background-color 0.3s;
+  border: none;
+  cursor: pointer;
+}
+.doctor-card__btn:hover {
+  background-color: #1a2d2d;
+}
+.doctor-card__btn--disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+.doctor-card__btn--disabled:hover {
+  background-color: #ccc;
 }
 
 /*# sourceMappingURL=style.css.map */
