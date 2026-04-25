@@ -1,0 +1,453 @@
+@use "../base/variables" as *;
+
+//* ==================== GAYA BERITA ==================== */
+.section-news {
+  background-color: white;
+
+  //* THE MAGIC: Tarik seluruh area berita ke atas menembus batas asli header */
+  margin-top: -5rem; /* Angka ini bisa Anda sesuaikan (misal -8rem atau -12rem) sampai pas */
+
+  //* Pastikan berita berada di atas lapisan hijau jika ditarik terlalu tinggi */
+  position: relative;
+  z-index: 10;
+
+  //* Kurangi padding atasnya menjadi lebih kecil */
+  padding-top: 10rem;
+  padding-bottom: clamp(6rem, 10vw, 12rem);
+}
+
+.section-history {
+  background-color: #f7f7f7; // Warna latar abu-abu yang sangat terang
+  // padding: 15rem 0; // Jarak napas lega atas dan bawah
+  padding: clamp(6rem, 10vw, 12rem) 0;
+}
+
+.timeline {
+  position: relative;
+  max-width: 100rem;
+  margin: 0 auto;
+
+  &::after {
+    content: "";
+    position: absolute;
+    width: 4px;
+    background-color: $warna-aksen;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -2px; /* Setengah dari lebar garis untuk benar-benar di tengah */
+
+    @include respond("tablet") {
+      left: 3rem;
+    }
+  }
+
+  &__item {
+    padding: 1rem 4rem;
+    position: relative;
+    background-color: inherit;
+    width: 50%;
+
+    &::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: $warna-aksen;
+      border: 4px solid $warna-background;
+      top: 2.5rem;
+      border-radius: 50%;
+      z-index: 1;
+    }
+    &--left {
+      left: 0;
+
+      &::after {
+        right: -10px; /* Setengah dari lebar titik untuk benar-benar di tepi */
+      }
+    }
+    &--right {
+      left: 50%;
+
+      &::after {
+        left: -10px; /* Setengah dari lebar titik untuk benar-benar di tepi */
+      }
+    }
+    @include respond("tablet") {
+      width: 100%;
+      padding-left: 7rem;
+      padding-right: 2rem;
+      margin-bottom: 2rem;
+
+      &--left,
+      &--right {
+        left: 0;
+
+        &::after {
+          left: 2rem; /* Setengah dari lebar titik untuk benar-benar di tepi */
+        }
+      }
+    }
+  }
+
+  &__content {
+    padding: 3rem;
+    background-color: #fff;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.1);
+    transition:
+      transform 0.3s,
+      box-shadow 0.3s;
+
+    &:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 2.5rem 4rem rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  &__year {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: $warna-utama;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  &__text {
+    font-size: 1.5rem;
+    color: $warna-text;
+    line-height: 1.8;
+  }
+}
+
+//* kartu layanan unggulan */
+.section-services {
+  //* 1. Tarik seluruh area layanan ke atas agar menabrak batas miring header */
+  margin-top: -15rem; /* Sesuaikan angka ini (misal -12rem atau -18rem) agar tumpang tindihnya pas */
+
+  //* 2. Pastikan area ini melayang di atas latar belakang hijau */
+  position: relative;
+  z-index: 20;
+
+  //* 3. Padding bawah untuk memberi jarak ke area sejarah */
+  // padding-bottom: 10rem;
+
+  padding-top: 18rem;
+  padding-bottom: clamp(6rem, 10vw, 10rem);
+}
+
+.services-wrapper {
+  max-width: 120rem;
+  margin: 0 auto;
+  display: grid;
+  // grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+  gap: 4rem;
+
+  @include respond("tablet") {
+    grid-template-columns: 1fr; /* Menumpuk vertikal di HP */
+    margin-top: -5rem; /* Menyesuaikan tarikan ke atas untuk layar kecil */
+  }
+}
+
+.services-grid {
+  display: grid;
+  //* RAHASIA GRID RESPONSIF: Otomatis menyesuaikan layar! */
+  grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+  gap: 6rem; /* Jarak antar kartu */
+  max-width: 114rem; /* Lebar maksimal area konten */
+  margin: 0 auto; /* Otomatis ke tengah layar */
+}
+
+.services-action {
+  text-align: center;
+  //* THE MAGIC: Mendorong tombol ke bawah menjauhi kartu */
+  margin-top: 6rem;
+
+  @include respond("tablet") {
+    margin-top: 4rem; // Sedikit dirapatkan jika di layar HP
+  }
+}
+
+.section-informasi {
+  //* 1. Pondasi Utama */
+  position: relative;
+  z-index: 5; /* Pastikan berada di bawah konten tapi di atas latar belakang */
+  background-color: #f8f3e1; /* Warna krem/beige sesuai desain */
+  // padding: 12rem 0;
+  padding: clamp(6rem, 10vw, 12rem) 0;
+  overflow: hidden; /* Wajib: Agar garis ombak tidak meluber ke luar layar */
+
+  //* 2. THE MAGIC: Garis Ombak Penghias di Latar Belakang */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    //* GANTI NAMA FILE INI DENGAN FILE SVG GARIS ANDA */
+    background-image: url("/img/stacked-peaks-haikei.svg");
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: cover; /* Memaksa garis menutupi seluruh area */
+
+    opacity: 1; /* Menipiskan garis agar tidak menabrak teks */
+    filter: grayscale(80%);
+    z-index: -1; /* Taruh di lapisan paling dasar */
+  }
+}
+
+//* 3. Grid untuk 2 Kartu Informasi */
+.informasi-wrapper {
+  position: relative;
+  z-index: 10; /* Menarik konten ke atas melewati garis ombak */
+  max-width: 100rem; /* Sedikit lebih sempit dari layanan agar rapi */
+  margin: 0 auto 10rem auto;
+
+  display: grid;
+
+  //* Penjelasan Logika:
+  //   - auto-fit: Penuhi ruang yang ada dengan kolom sebanyak mungkin.
+  //   - minmax: Kolom tidak boleh lebih kecil dari 40rem, tapi boleh membesar (1fr).
+  //   - min(100%, 40rem): Mencegah error layout jika layar HP lebih sempit dari 40rem.
+
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 40rem), 1fr));
+
+  //* Celah (gap) yang bernapas otomatis: 3rem di HP, 6rem di Desktop */
+  gap: clamp(3rem, 5vw, 6rem);
+
+  // padding kiri- kanan
+  // margin-bottom: 10rem; /* Jarak menuju banner IKM */
+
+  padding: 0 clamp(3rem, 5vw, 4rem);
+
+  // @include respond("tablet") {
+  //   grid-template-columns: 1fr; /* Jadi 1 kolom bersusun di HP */
+  //   padding: 0 4rem;
+  //   gap: 4rem;
+  // }
+}
+
+/* 5. Desain Banner IKM */
+.ikm-banner {
+  position: relative;
+  z-index: 10;
+  max-width: 80rem; /* Lebar banner IKM dibatasi agar elegan */
+  margin: 0 auto;
+  background-color: rgba(111, 207, 151, 0.15); /* Hijau transparan */
+  border-radius: 50px; /* Bentuk kapsul (pill shape) */
+  padding: 4rem;
+  text-align: center;
+
+  //* Efek garis putus-putus tepi seperti di PDF bisa dicoba di sini */
+  border: 2px dashed rgba(47, 79, 79, 0.2);
+
+  @include respond("tablet") {
+    margin: 0 3rem;
+    border-radius: 20px; /* Di HP kapsulnya sedikit lebih kotak */
+    padding: 3rem 2rem;
+  }
+
+  &__title {
+    font-size: clamp(1.4rem, 2vw, 2rem);
+    color: #2f4f4f;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  &__score {
+    //* Angka raksasa menggunakan fluid typography */
+    font-size: clamp(5rem, 6vw, 8rem);
+    font-weight: 900;
+    color: #2f4f4f;
+    letter-spacing: -2px; /* Didekatkan agar lebih solid */
+  }
+}
+
+//* ==================== GAYA AREA MITRA ==================== */
+.section-mitra {
+  // padding: 8rem 0;
+  padding: clamp(6rem, 10vw, 12rem) 0;
+  background-color: white;
+}
+
+//* Trik Flexbox untuk Judul Diapit Garis */
+.mitra-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding: 0 2rem;
+
+  &__line {
+    height: 1px;
+    background-color: #d38c44; /* Warna coklat/oranye dari desain */
+    flex: 0 1 30rem; /* Garis akan memanjang maksimal 300px, tapi bisa menyusut di HP */
+  }
+
+  &__title {
+    background-color: #d38c44;
+    color: white;
+    padding: 1rem 4rem;
+    border-radius: 50px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+}
+
+.mitra-subtitle {
+  font-size: 1.6rem;
+  color: #555;
+  margin-bottom: 5rem;
+}
+
+//* Trik Hover Logo Pro-Level */
+.mitra-logo {
+  width: 100%;
+  max-width: 14rem; /* Batasi besaran logo */
+  height: 6rem; /* Samakan tinggi semua logo */
+  object-fit: contain; /* Agar logo tidak gepeng/terpotong */
+  margin: 0 auto;
+  display: block;
+
+  //* Membuat logo abu-abu transparan secara default */
+  // filter: grayscale(100%);
+  opacity: 0.5;
+  transition: all 0.4s ease;
+
+  //* Menyala saat disentuh! */
+  &:hover {
+    filter: grayscale(0%);
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+// section statistik
+.statistics {
+  max-width: 100rem;
+
+  // margin: 5rem auto 0 auto;
+  // padding: 4rem;
+
+  //* THE MAGIC: Menambah margin-bottom menjadi 8rem agar tidak menabrak footer */
+  margin: 5rem auto 8rem auto;
+  padding: 5rem 4rem;
+
+  // background-color: rgba(255, 255, 255, 0.5);
+  // border-radius: 30px;
+  // border: 1px dashed rgba(47, 79, 79, 0.2);
+
+  //* Mengubah latar menjadi putih bersih solid */
+  background-color: #ffffff;
+  border-radius: 20px;
+
+  //* Menghapus garis putus-putus dan menggantinya dengan elevasi (bayangan) */
+  border: none;
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.05);
+
+  &__main-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #2f4f4f;
+    text-transform: uppercase;
+    margin-bottom: 3rem; //* Memberi jarak antara judul dan angka */
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+
+    @include respond("tablet") {
+      grid-template-columns: repeat(2, 1fr); // 2 kolom di tablet
+    }
+    @include respond("mobile") {
+      grid-template-columns: 1fr; // 1 kolom di HP
+    }
+  }
+}
+
+/* ==================== GAYA JADWAL DOKTER ==================== */
+.section-schedule {
+  // padding: 10rem 4rem;
+  padding: clamp(6rem, 10vw, 12rem) 0;
+  background-color: #f8f3e1; /* Latar krem RSAS */
+}
+
+.schedule-subtitle {
+  font-size: 1.6rem;
+  color: #555;
+  margin-top: 1rem;
+}
+
+/* Panel Filter Mengambang */
+.schedule-filter {
+  max-width: 80rem;
+  margin: 0 auto 5rem auto;
+  background-color: white;
+  padding: 3rem;
+  border-radius: 15px;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.05);
+
+  display: flex;
+  gap: 3rem;
+
+  @include respond("tablet") {
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
+
+.filter-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-label {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #2f4f4f;
+  margin-bottom: 0.8rem;
+
+  i {
+    color: #6fcf97;
+    margin-right: 0.5rem;
+  }
+}
+
+.filter-input {
+  font-family: inherit;
+  font-size: 1.5rem;
+  padding: 1.2rem 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: all 0.3s;
+
+  &:focus {
+    outline: none;
+    border-color: #6fcf97;
+    box-shadow: 0 0 0 3px rgba(111, 207, 151, 0.2);
+  }
+}
+
+/* Grid Kartu Dokter */
+.schedule-grid {
+  max-width: 120rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(32rem, 1fr)
+  ); /* Responsif otomatis tanpa media query! */
+  gap: 3rem;
+}

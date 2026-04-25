@@ -1,0 +1,119 @@
+@use "variables" as *;
+
+// Kelas ini bisa ditempel di elemen mana saja di HTML untuk membuat teksnya rata tengah dan memberi jarak bawah yang konsisten.
+.u-center-text {
+  text-align: center;
+}
+.u-margin-bottom-small {
+  margin-bottom: 1.5rem;
+}
+.u-margin-bottom-big {
+  margin-bottom: 8rem;
+}
+
+.u-margin-right-small {
+  margin-right: 1rem !important;
+}
+
+.heading-primary {
+  color: $warna-utama;
+  text-transform: uppercase;
+  margin-bottom: 6rem;
+
+  &__main {
+    display: block;
+    font-size: 4rem;
+    // font-size: clamp(
+    //   2.2rem,
+    //   5vw,
+    //   3rem
+    // ); /* Ukuran huruf yang responsif: minimal 2.2rem, maksimal 3rem, dan menyesuaikan dengan lebar layar */
+    font-weight: 700;
+    color: $warna-background;
+    letter-spacing: 2rem;
+
+    @include respond("tablet") {
+      // font-size: 2.2rem; /* Huruf dikecilkan */
+      letter-spacing: 0.8rem; /* Jarak huruf dirapatkan agar bisa 1 baris */
+    }
+
+    animation: moveInLeft 3s ease-out;
+    animation-timing-function: ease-out;
+  }
+
+  &__sub {
+    display: block;
+    font-size: 2rem;
+    font-weight: 400;
+    color: $warna-background;
+    letter-spacing: 0.5rem;
+
+    animation-name: moveInRight;
+    animation-duration: 3s;
+    animation-timing-function: ease-out;
+
+    @include respond("tablet") {
+      font-size: 1.2rem;
+      letter-spacing: 0.4rem;
+      margin-top: 1rem; /* Memberi sedikit jarak bernapas dari teks atasnya */
+    }
+  }
+
+  &__description {
+    font-size: 1.5rem;
+    color: $warna-text;
+    text-transform: none;
+    letter-spacing: 0.5px;
+    line-height: 1.8;
+    margin-top: 4rem;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+
+    @include respond("tablet") {
+      font-size: 1.2rem; /* Ukuran teks deskripsi dirampingkan untuk layar kecil */
+      max-width: 100%; /* Lebar maksimal dihapus agar bisa menyesuaikan layar */
+      padding: 0 1rem; /* Memberi sedikit padding agar tidak mepet ke tepi layar */
+    }
+  }
+}
+
+.heading-secondary {
+  font-size: clamp(2.5rem, 3vw + 1rem, 3rem);
+  text-transform: uppercase;
+  font-weight: 700;
+  display: inline-block;
+  color: $warna-utama;
+  text-align: center;
+  margin-bottom: 8rem;
+
+  @include respond("mobile") {
+    // font-size: 2rem; /* Ukuran huruf dirampingkan */
+    margin-bottom: 3rem; /* Jarak bawah dirampingkan */
+  }
+
+  @include respond("tablet") {
+    font-size: 2rem; /* Ukuran huruf dirampingkan */
+    margin-bottom: 3rem; /* Jarak bawah dirampingkan */
+  }
+
+  //* Efek teks gradien yang modern */
+  background-image: linear-gradient(to right, $warna-utama, $warna-aksen);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  letter-spacing: 0.2rem;
+  transition: all 0.2s;
+
+  &:hover {
+    transform: skewY(2deg) skewX(15deg) scale(1.1);
+    text-shadow: 0.5rem 1rem 2rem rgba(0, 0, 0, 0.2);
+  }
+}
+
+.heading-tertiary {
+  font-size: clamp(1.4rem, 1.5vw + 0.5rem, 2rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: $warna-text;
+}

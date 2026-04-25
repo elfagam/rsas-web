@@ -1,0 +1,121 @@
+@use "../base/variables" as *;
+
+/* sass/pages/_berita.scss */
+
+/* 1. Header Halaman (Memberi jarak dari Navbar) */
+.page-header {
+  background-color: #f8f3e1; /* Latar warna krem lembut RSAS */
+  padding: 15rem 0 5rem 0; /* Jarak atas ekstra besar agar tidak tertutup Navbar */
+
+  &__container {
+    max-width: 120rem;
+    margin: 0 auto;
+    padding: 0 4rem;
+  }
+}
+
+/* Modifikasi judul utama khusus untuk halaman dalam agar berwarna hijau gelap */
+.heading-primary__main--dark {
+  color: #2f4f4f;
+  letter-spacing: 2px;
+}
+
+/* 2. Breadcrumb (Navigasi Jejak) */
+.breadcrumb {
+  font-size: 1.4rem;
+  color: #555;
+  margin-bottom: 2rem;
+  font-weight: 600;
+
+  &__link {
+    color: #6fcf97; /* Warna aksen hijau terang */
+    text-decoration: none;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #2f4f4f;
+    }
+  }
+
+  &__separator {
+    margin: 0 1rem;
+    color: #999;
+  }
+
+  &__current {
+    color: #2f4f4f; /* Halaman saat ini warnanya gelap */
+  }
+}
+
+/* 3. Layout Utama Halaman Berita */
+.section-berita-page {
+  background-color: #f8f3e1;
+  padding-bottom: clamp(6rem, 10vw, 12rem);
+}
+
+.berita-page-wrapper {
+  max-width: 120rem;
+  margin: 0 auto;
+  padding: 0 4rem;
+}
+
+/* 4. Panel Filter */
+.filter-box {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 3rem;
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.05);
+  margin-bottom: 6rem;
+
+  /* THE MAGIC: Menarik panel filter ke atas sedikit agar tumpang tindih dengan .page-header */
+  margin-top: -3rem;
+  position: relative;
+  z-index: 10;
+
+  &__title {
+    font-size: 1.6rem;
+    color: #2f4f4f;
+    margin-bottom: 2rem;
+    font-weight: 700;
+  }
+
+  &__controls {
+    display: flex;
+    gap: 3rem;
+    align-items: flex-end; /* Memastikan tombol sejajar dengan input */
+
+    @include respond("tablet") {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 2rem;
+    }
+  }
+}
+
+/* Menggunakan ulang gaya input filter dari desain jadwal dokter Anda */
+.filter-select {
+  width: 100%;
+  font-family: inherit;
+  font-size: 1.5rem;
+  padding: 1.2rem 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fcfcfc;
+  color: #555;
+  transition: all 0.3s;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: #6fcf97;
+    box-shadow: 0 0 0 3px rgba(111, 207, 151, 0.2);
+  }
+}
+
+/* 5. Grid Berita Cerdas (Fluid Grid) */
+.news-page-grid {
+  display: grid;
+  /* Otomatis menjadi 3 kolom di desktop, 2 kolom di tablet, 1 kolom di HP */
+  grid-template-columns: repeat(auto-fill, minmax(32rem, 1fr));
+  gap: 4rem;
+}

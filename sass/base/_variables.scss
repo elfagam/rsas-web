@@ -1,0 +1,31 @@
+@mixin respond($ukuran-layar) {
+  @if $ukuran-layar == "mobile" {
+    @media (max-width: 37.5em) {
+      @content;
+    }
+  } @else if $ukuran-layar == "tablet" {
+    @media (max-width: 56.25em) {
+      @content;
+    }
+  } @else if $ukuran-layar == "desktop" {
+    @media (min-width: 56.25em) {
+      @content;
+    }
+  }
+}
+
+@mixin center-absolute {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* variable identitas visual */
+
+$warna-text: #313e17;
+$warna-aksen: #6fcf97;
+$warna-utama: #2fa084;
+$warna-background: #f8f3e1;
+
+$font-utama: "Lato", sans-serif;

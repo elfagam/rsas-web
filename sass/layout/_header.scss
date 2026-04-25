@@ -1,0 +1,191 @@
+@use "../base/variables" as *;
+
+//* styling header dan teks */
+
+.header {
+  height: 95vh;
+  position: relative;
+  background-image:
+    linear-gradient(
+      to right bottom,
+      rgba($warna-utama, 0.8),
+      rgba($warna-aksen, 0.8)
+    ),
+    url("../img/hero.jpg");
+  background-size: cover;
+  background-position: top;
+  position: relative;
+
+  clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+
+  &__logo-box {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+
+    @include respond("mobile") {
+      top: 20px;
+      left: 20px;
+    }
+  }
+
+  &__logo {
+    height: 3.5rem;
+  }
+
+  &__text-box {
+    @include center-absolute;
+    text-align: center;
+  }
+}
+
+.navbar {
+  //   left: 4rem;
+  //   right: 4rem;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: transparent; /* Navbar transparan agar terlihat latar belakang hero */
+  position: absolute; /* Posisi absolut agar bisa menempel di atas hero */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10; /* Pastikan navbar berada di atas elemen lain */
+
+  &__checkbox {
+    display: none;
+  }
+
+  &__button {
+    display: none;
+    cursor: pointer;
+  }
+
+  &__logo {
+    height: 3.5rem;
+  }
+
+  &__list {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+
+    @include respond("mobile") {
+      gap: 1.5rem; /* Jarak antar item dirampingkan untuk layar kecil */
+    }
+  }
+
+  &__link {
+    &:link,
+    &:visited {
+      font-size: 1.5rem;
+      font-weight: 400;
+      color: $warna-background;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-weight: 700;
+      transition: all 0.2s;
+
+      //efek hover yang sederhana tapi elegan
+      padding-bottom: 2px solid transparent; /* Ini untuk membuat ruang untuk border bawah saat hover */
+      transition: all 0.2s;
+    }
+    &:hover,
+    &:active {
+      color: $warna-text;
+      border-bottom: 2px solid $warna-utama; /* Efek garis bawah saat hover */
+
+      transform: translate(-2px, -2px) scale(1.05); /* Efek sedikit melayang dan membesar saat hover */
+    }
+  }
+
+  @include respond("mobile") {
+    display: block; /* Tampilkan tombol hamburger pada layar kecil */
+    position: relative;
+  }
+
+  @include respond("tablet") {
+    &__button {
+      display: block;
+      position: relative;
+      z-index: 2000;
+      margin-top: 1rem;
+      margin-right: 3rem;
+
+      margin-left: auto; /* Menempel ke kanan */
+    }
+
+    &__icon {
+      position: relative;
+      &,
+      &::before,
+      &::after {
+        content: "";
+        width: 2.5rem;
+        height: 2px;
+        background-color: $warna-background;
+        display: inline-block;
+        position: absolute;
+        left: 0;
+        transition: all 0.2s;
+        transform-origin: center;
+      }
+
+      &::before,
+      &::after {
+        content: "";
+      }
+
+      &::before {
+        top: -0.8rem;
+      }
+      &::after {
+        top: 0.8rem;
+      }
+    }
+
+    &__list {
+      position: fixed;
+      top: 0;
+      left: -100%; /* Sembunyi di kiri */
+      height: 100vh;
+      width: 100%;
+      background-color: rgba($warna-utama, 0.95);
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      transition: all 0.3s cubic-bezier(0.075, 0.82, 0.165, 1);
+    }
+
+    &__link {
+      &:link,
+      &:visited {
+        font-size: 2rem;
+        color: $warna-background;
+      }
+    }
+
+    /* AKSI SAAT DICENTANG (MENU MUNCUL) */
+    &__checkbox:checked ~ &__list {
+      left: 0;
+    }
+
+    /* ANIMASI HAMBURGER MENJADI HURUF X (Brilian!) */
+    &__checkbox:checked ~ &__button &__icon {
+      background-color: transparent;
+    }
+
+    &__checkbox:checked ~ &__button &__icon::before {
+      transform: rotate(45deg);
+      top: 0;
+    }
+
+    &__checkbox:checked ~ &__button &__icon::after {
+      transform: rotate(-45deg);
+      top: 0;
+    }
+  }
+}

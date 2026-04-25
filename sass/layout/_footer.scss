@@ -1,0 +1,145 @@
+@use "../base/variables" as *;
+
+.footer {
+  background-color: #2f4f4f; /* Hijau Gelap RSAS */
+  color: #f8f3e1; /* Warna teks krem terang agar kontras */
+  position: relative;
+  padding-top: 6rem;
+
+  /* Garis dekorasi di bagian paling atas footer */
+  &__decoration {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(
+      90deg,
+      #6fcf97 0%,
+      #d38c44 100%
+    ); /* Gradasi Hijau ke Oranye */
+  }
+
+  &__grid {
+    max-width: 120rem;
+    margin: 0 auto;
+    padding: 0 4rem 6rem 4rem;
+
+    display: grid;
+    /* Membagi ruang: Kolom 1 lebih lebar (1.5), sisanya sama (1) */
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 6rem;
+
+    border-bottom: 1px solid rgba(248, 243, 225, 0.1); /* Garis batas tipis */
+
+    @include respond("tablet") {
+      grid-template-columns: 1fr; /* Jadi 1 kolom bersusun di HP */
+      gap: 4rem;
+      text-align: center; /* Teks ke tengah di layar kecil */
+    }
+  }
+
+  &__logo {
+    width: 12rem;
+    margin-bottom: 2rem;
+  }
+
+  &__hospital-name {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+  }
+
+  &__text {
+    font-size: 1.4rem;
+    line-height: 1.8;
+    color: rgba(248, 243, 225, 0.8); /* Teks sedikit redup */
+  }
+
+  &__title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 2.5rem;
+    color: #6fcf97; /* Aksen hijau terang untuk judul */
+  }
+
+  &__list {
+    list-style: none;
+  }
+
+  &__list-item {
+    margin-bottom: 1.5rem;
+  }
+
+  &__link {
+    &:link,
+    &:visited {
+      color: rgba(248, 243, 225, 0.8);
+      text-decoration: none;
+      font-size: 1.4rem;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+
+      @include respond("tablet") {
+        justify-content: center; /* Ikon dan teks ke tengah di HP */
+      }
+    }
+
+    &:hover,
+    &:active {
+      color: #6fcf97;
+      transform: translateX(5px); /* Efek bergeser sedikit saat di-hover */
+    }
+  }
+
+  &__icon {
+    font-size: 1.8rem;
+    margin-right: 1.5rem;
+    color: #d38c44; /* Ikon warna oranye */
+  }
+
+  /* Lingkaran Ikon Sosial Media */
+  &__socials {
+    display: flex;
+    gap: 1.5rem;
+
+    @include respond("tablet") {
+      justify-content: center;
+    }
+  }
+
+  &__social-link {
+    &:link,
+    &:visited {
+      display: inline-block;
+      width: 4rem;
+      height: 4rem;
+      background-color: rgba(248, 243, 225, 0.1);
+      color: #f8f3e1;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      transition: all 0.3s;
+    }
+
+    &:hover,
+    &:active {
+      background-color: #6fcf97;
+      color: #2f4f4f;
+      transform: translateY(-3px);
+    }
+  }
+
+  &__copyright {
+    text-align: center;
+    padding: 2.5rem 0;
+    font-size: 1.2rem;
+    color: rgba(248, 243, 225, 0.5);
+  }
+}

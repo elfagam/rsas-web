@@ -1,0 +1,83 @@
+// SISTEM SKELETON LOADING
+
+// 1. Animasi Dasar
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+// 2. Kelas Helper untuk element berkilau
+.skeleton-box {
+  background: linear-gradient(to right, #f6f7f8 8%, #edeef1 18%, #f6f7f8 33%);
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite linear;
+  border-radius: 4px;
+}
+
+// VARIAN SKELETON
+.skeleton-news {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.05);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &__img {
+    height: 22rem;
+    border-radius: 0;
+  }
+  &__content {
+    padding: 3rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  &__title {
+    height: 2.5rem;
+    width: 85%;
+  }
+  &__text {
+    height: 1.2rem;
+    width: 100%;
+  }
+  &__text--short {
+    width: 60%;
+  }
+  &__link {
+    height: 1.5rem;
+    width: 35%;
+    margin-top: auto;
+  }
+}
+
+// Kerangkan untuk jadwal dokter
+.skeleton-doctor {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+
+  &__avatar {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%; //bentuk bulat
+  }
+  &__name {
+    height: 2rem;
+    width: 70%;
+    margin-bottom: 1rem;
+  }
+  &__speciality {
+    height: 1.5rem;
+    width: 50%;
+  }
+}

@@ -1,0 +1,104 @@
+@use "../base/variables" as *;
+
+//* styling tombol */
+.btn {
+  //* 1. Pengaturan Dasar Tombol */
+  &:link,
+  &:visited {
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 1.5rem 4rem;
+    display: inline-block;
+    text-align: center;
+    border-radius: 10rem;
+    transition: all 0.2s;
+    position: relative;
+    font-size: 1.6rem;
+
+    @include respond("tablet") {
+      padding: 1rem 2rem; /* Ukuran tombol dirampingkan */
+      font-size: 1rem; /* Teks dikecilkan agar muat 1 baris */
+    }
+  }
+
+  //* 2. Efek saat disentuh mouse (Hover) & di-klik (Active) */
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.3);
+  }
+
+  &:active {
+    transform: translateY(-1px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.2);
+  }
+
+  //* 3. Modifier: Tombol Putih (Keluar dari &:link) */
+  &__white {
+    background-color: $warna-background;
+    color: $warna-text;
+
+    //* Ini memberi tahu elemen semu (after) untuk ikut berwarna putih */
+    &::after {
+      background-color: $warna-background;
+    }
+  }
+
+  //* 4. Efek Elemen Semu (after) untuk animasi zoom out saat hover */
+  &::after {
+    content: ""; //* Wajib ada, jangan di-comment! */
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    border-radius: 10rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    transition: all 0.4s;
+  }
+
+  &:hover::after {
+    transform: scaleX(1.4) scaleY(1.6);
+    opacity: 0;
+  }
+
+  //* 5. Modifier: Animasi Muncul dari Bawah */
+  &__animated {
+    //* Menggunakan format sebaris: nama | durasi | timing | delay */
+    animation: moveInButton 1s ease-out 0.75s;
+
+    //* Ini adalah "rahasia" agar tombol tidak terlihat sebelum animasinya dimulai */
+    animation-fill-mode: backwards;
+  }
+}
+
+//* Desain Tombol Outline yang Elegan */
+.btn-outline {
+  &:link,
+  &:visited {
+    display: inline-block;
+    padding: 1.5rem 4rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+
+    //* Membuat garis pinggir berwarna hijau aksen */
+    color: #2f4f4f;
+    background-color: transparent;
+    border: 2px solid #6fcf97;
+    border-radius: 50px; /* Bentuk pil/kapsul bulat */
+
+    transition: all 0.3s;
+  }
+
+  &:hover,
+  &:active {
+    //* Saat disentuh, tombol terisi warna hijau dan teks jadi putih */
+    background-color: #6fcf97;
+    color: #f8f3e1;
+    transform: translateY(-3px);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+  }
+}

@@ -1,0 +1,25 @@
+/* Membatasi lebar slider agar tidak mentok ke ujung layar */
+.news-slider {
+  max-width: 120rem;
+  padding-bottom: 5rem; /* Ruang untuk titik pagination */
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+/* Kustomisasi Warna Panah & Titik Swiper agar Hijau RSAS */
+:root {
+  --swiper-theme-color: #2f4f4f; /* Ganti dengan $warna-utama Anda */
+}
+
+//* Pengaturan Jarak Slider */
+.mitra-slider {
+  max-width: 110rem;
+  padding: 2rem 5rem; //* Ruang ekstra di kiri kanan untuk panah */
+}
+
+//* Kustomisasi Panah Swiper Khusus Mitra */
+.mitra-next,
+.mitra-prev {
+  color: #d38c44 !important; /* Ubah panah jadi oranye */
+  transform: scale(0.6); /* Perkecil ukuran panahnya */
+}

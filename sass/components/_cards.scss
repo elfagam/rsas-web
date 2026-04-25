@@ -1,0 +1,343 @@
+@use "../base/variables" as *;
+
+.news-card {
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  overflow: hidden; /* Mencegah gambar keluar dari border melengkung */
+  box-shadow: 0 1rem 3rem rgba(black, 0.05);
+  height: 100%; /* Agar semua kartu tingginya sama rata */
+  display: flex;
+  flex-direction: column;
+
+  &__img {
+    width: 100%;
+    height: 22rem; /* Tinggi paksa untuk gambar */
+    object-fit: cover; /* THE MAGIC: Gambar dipotong otomatis, anti gepeng! */
+  }
+
+  &__content {
+    padding: 3rem;
+    flex: 1; /* Mendorong tombol 'baca selengkapnya' ke bagian paling bawah */
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2f4f4f;
+    margin-bottom: 1.5rem;
+    line-height: 1.4;
+  }
+
+  &__text {
+    font-size: 1.4rem;
+    color: #777;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    flex: 1;
+  }
+
+  &__link {
+    &:link,
+    &:visited {
+      font-size: 1.2rem;
+      color: #d38c44; /* Warna cokelat/oranye dari desain Anda */
+      text-decoration: none;
+      text-transform: lowercase;
+      font-weight: 700;
+      transition: all 0.3s;
+      align-self: flex-start; /* Taruh di sebelah kiri */
+    }
+
+    &:hover,
+    &:active {
+      color: #2f4f4f;
+    }
+  }
+}
+
+.service-card {
+  background-color: #ffffff; /* Warna putih bersih untuk kartu */
+  font-size: 1.5rem;
+  padding: 2.5rem;
+  text-align: center;
+  border-radius: 0.8rem;
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.1); /* Bayangan lembut */
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s; /* Animasi transisi yang mulus */
+
+  //* Efek kartu melayang saat disentuh mouse */
+  &:hover {
+    transform: translateY(-5px) scale(1.03);
+    box-shadow: 0 2.5rem 4rem rgba(0, 0, 0, 0.15);
+  }
+
+  &__icon {
+    font-size: 6rem;
+    margin-bottom: 1.5rem;
+  }
+
+  &__text {
+    color: #777; //* Warna teks isi kartu agak diabu-abukan agar tidak menyaingi judul */
+  }
+}
+
+//* 4. Desain Kartu Informasi */
+.info-card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  text-align: center;
+  border-top: 6px solid #6fcf97; /* Garis aksen hijau manis di atap kartu */
+
+  &__title {
+    background-color: #6fcf97;
+    color: white;
+    padding: 1.5rem;
+    font-size: clamp(1.4rem, 1.5vw, 1.8rem);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  &__body {
+    padding: 2rem;
+  }
+
+  &__img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px; /* Sudut gambar agak melengkung */
+    object-fit: cover;
+  }
+}
+
+//statistik card
+.stat-card {
+  text-align: center;
+  padding: 2rem;
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+
+  &:last-child {
+    border-right: none;
+  } // Hilangkan garis di kartu terakhir
+
+  @include respond("tablet") {
+    border-right: none;
+    &:nth-child(odd) {
+      border-right: 1px solid rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  &__label {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #2f4f4f;
+    margin-bottom: 1rem;
+  }
+
+  &__number {
+    font-size: 4.5rem;
+    font-weight: 800;
+    color: #2f4f4f;
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+
+  &__comparison {
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+
+    &--up {
+      color: #6fcf97;
+    } // Hijau jika naik
+    &--down {
+      color: #eb5757;
+    } // Merah jika turun
+  }
+}
+
+//dokter card
+.doctor-card {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.03);
+  transition: transform 0.3s;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    padding: 2rem;
+    background-color: rgba(111, 207, 151, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+
+  &__avatar {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    background-color: #6fcf97;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin-right: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  &__name {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #2f4f4f;
+    line-height: 1.3;
+    margin-bottom: 0.4rem;
+  }
+
+  &__specialty {
+    font-size: 1.3rem;
+    color: #d38c44;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  &__body {
+    padding: 2rem;
+    flex: 1;
+  }
+
+  .schedule-time {
+    font-size: 1.5rem;
+    color: #555;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+
+    i {
+      color: #2f4f4f;
+      margin-right: 1rem;
+      font-size: 1.8rem;
+    }
+  }
+
+  .schedule-status {
+    font-size: 1.4rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+
+    i {
+      margin-right: 0.8rem;
+    }
+  }
+
+  .status-available {
+    color: #6fcf97;
+  }
+  .status-full {
+    color: #eb5757;
+  }
+
+  &__btn {
+    display: block;
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #2f4f4f;
+    color: white;
+    text-decoration: none;
+    font-size: 1.4rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background-color 0.3s;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #1a2d2d;
+    }
+
+    &--disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+      &:hover {
+        background-color: #ccc;
+      }
+    }
+  }
+}
+
+/* 2. Kerangka Kartu (Bentuk dan Ukurannya Meniru .news-card) */
+.skeleton-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.05);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  /* 3. Kelas Helper untuk Elemen Abu-abu yang Berkilau */
+  &__box {
+    /* Gradasi abu-abu terang ke gelap, lalu ke terang lagi */
+    background: linear-gradient(to right, #f6f7f8 8%, #edeef1 18%, #f6f7f8 33%);
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+    border-radius: 4px;
+  }
+
+  /* 4. Placeholder Gambar */
+  &__img {
+    width: 100%;
+    height: 22rem; /* Sama persis dengan tinggi gambar berita asli */
+    border-radius: 0; /* Menghilangkan radius di bawah agar kotak */
+  }
+
+  /* 5. Placeholder Konten Teks */
+  &__content {
+    padding: 3rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; /* Jarak standar antar baris tulang */
+  }
+
+  /* Placeholder Judul (Sedikit lebih tebal) */
+  &__title {
+    height: 2.5rem;
+    width: 85%;
+    margin-bottom: 1rem;
+  }
+
+  /* Placeholder Paragraf */
+  &__text-line {
+    height: 1.2rem;
+    width: 100%;
+
+    /* Modifikator untuk baris terakhir yang lebih pendek */
+    &--short {
+      width: 60%;
+    }
+  }
+
+  /* Placeholder Tombol/Link di paling bawah */
+  &__link {
+    height: 1.5rem;
+    width: 35%;
+    margin-top: auto; /* Mendorong tulang ini ke bagian paling bawah kartu */
+  }
+}
