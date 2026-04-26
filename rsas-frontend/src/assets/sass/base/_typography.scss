@@ -1,0 +1,92 @@
+@use "variables" as *;
+
+// Kelas ini bisa ditempel di elemen mana saja di HTML untuk membuat teksnya rata tengah dan memberi jarak bawah yang konsisten.
+.u-center-text {
+  text-align: center;
+}
+.u-margin-bottom-small {
+  margin-bottom: 1.5rem;
+}
+.u-margin-bottom-big {
+  margin-bottom: 8rem;
+}
+
+.u-margin-right-small {
+  margin-right: 1rem !important;
+}
+
+.heading-primary {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3.5rem, 6vw + 1rem, 7rem);
+  font-weight: 900;
+  line-height: 1.1;
+  color: #fff;
+  margin-bottom: 4rem;
+
+  &__main {
+    display: block;
+    animation: moveInLeft 1.5s ease-out;
+  }
+
+  &__sub {
+    display: block;
+    font-size: 0.6em;
+    font-weight: 400;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: 1rem;
+    letter-spacing: 1px;
+    animation: moveInRight 1.5s ease-out;
+  }
+
+  @include respond("tablet") {
+    font-size: 4rem;
+  }
+  &__description {
+    font-size: 1.5rem;
+    color: $warna-text;
+    text-transform: none;
+    letter-spacing: 0.5px;
+    line-height: 1.8;
+    margin-top: 4rem;
+    max-width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+
+    @include respond("tablet") {
+      font-size: 1.2rem;
+      max-width: 100%;
+      padding: 0 1rem;
+    }
+  }
+}
+
+.heading-secondary {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 4vw + 0.5rem, 5.2rem);
+  font-weight: 700;
+  color: $warna-text;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  display: inline-block;
+  margin-bottom: 2rem;
+
+  span {
+    font-style: italic;
+    font-weight: 400;
+    color: $warna-utama;
+  }
+
+  @include respond("tablet") {
+    font-size: 3.2rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.heading-tertiary {
+  font-family: 'Outfit', sans-serif;
+  font-size: clamp(1.8rem, 2vw, 2.4rem);
+  font-weight: 800;
+  color: $warna-text;
+  margin-bottom: 1.5rem;
+}

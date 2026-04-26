@@ -119,3 +119,17 @@
   grid-template-columns: repeat(auto-fill, minmax(32rem, 1fr));
   gap: 4rem;
 }
+
+.news-grid-container {
+  display: grid;
+  // Ini kunci agar kartu tidak gepeng: bagi menjadi 3 kolom sama rata
+  grid-template-columns: repeat(3, 1fr);
+
+  // Jarak antar kartu
+  gap: 4rem;
+
+  // Agar tidak mepet pinggir halaman
+  max-width: 120rem;
+  margin: 0 auto;
+  padding: 0 4rem;
+}
