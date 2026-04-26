@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  rsas-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rsas-web-app
+    ports:
+      - "8080:80"
+    restart: always

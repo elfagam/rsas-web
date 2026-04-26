@@ -1,380 +1,427 @@
 <script setup>
-import { ref, computed, onMounted } from "vue";
-import NewsCard from "../components/ui/NewsCard.vue";
-import { ASSETS } from '../config/assets';
+import { ref, onMounted } from 'vue';
+import api from '../services/api';
 
-// Helper untuk resolusi gambar dinamis
-const getImageUrl = (name) => {
-  return new URL(`../assets/img/${name}`, import.meta.url).href;
-};
-
+const newsList = ref([]);
 const isLoading = ref(true);
 const searchQuery = ref('');
-const activeCategory = ref('');
+const selectedCategory = ref('Semua Kategori');
 
-// Simulasi Data
-const daftarBerita = ref([
-  {
-    id: 1,
-    kategori: "PENGUMUMAN",
-    tanggal: "25 April 2026",
-    judul: "Perkuat Mutu Pelayanan, Kemenkes RI Verifikasi Standarisasi RSUD",
-    ringkasan: "GORONTALO - Kementerian Kesehatan Republik Indonesia melakukan kunjungan kerja dalam rangka verifikasi lapangan terhadap standar kualitas pelayanan...",
-    gambar: getImageUrl("nat-1.jpg"),
-    tautan: "/berita/1",
-  },
-  {
-    id: 2,
-    kategori: "LAYANAN",
-    tanggal: "24 April 2026",
-    judul: "Pelayanan Tetap Optimal, RSUD Prof. Dr. H. Aloei Saboe Pastikan Kesiapan SDM",
-    ringkasan: "GORONTALO - RSUD memastikan seluruh layanan kesehatan tetap berjalan optimal dengan melakukan rotasi jadwal tenaga medis selama periode libur panjang...",
-    gambar: getImageUrl("nat-2.jpg"),
-    tautan: "/berita/2",
-  },
-  {
-    id: 3,
-    kategori: "PENGUMUMAN",
-    tanggal: "22 April 2026",
-    judul: "Jadwal Operasional Klinik Spesialis Selama Bulan Ramadhan",
-    ringkasan: "Diberitahukan kepada seluruh pasien dan pengunjung, terdapat penyesuaian jadwal jam operasional untuk beberapa poli klinik spesialis...",
-    gambar: getImageUrl("nat-3.jpg"),
-    tautan: "/berita/3",
-  },
-]);
-
-const filteredBerita = computed(() => {
-  return daftarBerita.value.filter(berita => {
-    const matchesSearch = berita.judul.toLowerCase().includes(searchQuery.value.toLowerCase()) || 
-                         berita.ringkasan.toLowerCase().includes(searchQuery.value.toLowerCase());
-    const matchesCategory = !activeCategory.value || berita.kategori.toLowerCase() === activeCategory.value.toLowerCase();
-    return matchesSearch && matchesCategory;
-  });
-});
-
-onMounted(() => {
-  // Simulasi fetching data
-  setTimeout(() => {
+const fetchPublicNews = async () => {
+  try {
+    const response = await api.get('/public/news');
+    newsList.value = response.data.data;
+  } catch (error) {
+    console.error('Failed to fetch news:', error);
+  } finally {
     isLoading.value = false;
-  }, 1500);
-});
+  }
+};
+
+const stripHtml = (html) => {
+  const tmp = document.createElement("DIV");
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || "";
+};
+
+onMounted(fetchPublicNews);
 </script>
 
 <template>
-  <div class="berita-view">
-    <!-- Hero Section -->
-    <header 
-      class="berita-hero"
-      :style="{ backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url(${ASSETS.hero.berita})` }"
-    >
+  <div class="berita-page">
+    <!-- Hero Section with Background Image -->
+    <section class="hero-section">
+      <div class="hero-overlay"></div>
       <div class="container">
-        <div class="berita-hero__content" data-aos="fade-up">
-          <div class="berita-hero__badge">Pusat Media & Edukasi</div>
-          <h1 class="heading-academic">Berita & <span>Kabar Kesehatan</span></h1>
-          <p class="berita-hero__sub">Tetap terinformasi dengan berita terbaru, pengumuman resmi, dan tips kesehatan terpercaya dari para ahli kami.</p>
+        <div class="hero-content" data-aos="zoom-out">
+          <span class="hero-badge">Pusat Media & Edukasi</span>
+          <h1 class="hero-title">Berita & <br><span>Kabar Kesehatan</span></h1>
+          <p class="hero-subtitle">
+            Tetap terinformasi dengan berita terbaru, pengumuman resmi, dan tips kesehatan terpercaya dari para ahli kami.
+          </p>
         </div>
       </div>
-    </header>
 
-    <div class="filter-wrapper">
-      <div class="filter-bar" data-aos="fade-up">
-        <span class="search-icon">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </span>
-
-        <input
-          v-model="searchQuery"
-          type="text"
-          placeholder="Cari berita atau pengumuman..."
-          class="search-input"
-        />
-
-        <div class="divider"></div>
-
-        <select v-model="activeCategory" class="category-select">
-          <option value="">Semua Kategori</option>
-          <option value="pengumuman">Pengumuman</option>
-          <option value="layanan">Layanan</option>
-        </select>
-
-        <button class="btn-search">
-          Cari
-        </button>
-      </div>
-    </div>
-
-    <section class="section-berita">
-      <div class="container">
-        <div class="news-grid">
-          <template v-if="isLoading">
-            <div class="skeleton-news" v-for="n in 3" :key="'skeleton-' + n">
-              <div class="skeleton-img"></div>
-              <div class="skeleton-content">
-                <div class="skeleton-line sm"></div>
-                <div class="skeleton-line lg"></div>
-                <div class="skeleton-line md"></div>
-              </div>
+      <!-- Search Bar Overlapping (Positioning Wrapper) -->
+      <div class="search-container">
+        <!-- Animation Wrapper -->
+        <div class="search-box-wrapper" data-aos="fade-up" data-aos-delay="200">
+          <div class="search-box">
+            <div class="search-input-group">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input 
+                v-model="searchQuery" 
+                type="text" 
+                placeholder="Cari berita atau pengumuman..." 
+              />
             </div>
-          </template>
+            <div class="search-filter">
+              <select v-model="selectedCategory">
+                <option>Semua Kategori</option>
+                <option>Kesehatan</option>
+                <option>Kegiatan</option>
+                <option>Pengumuman</option>
+              </select>
+            </div>
+            <button class="btn-search">Cari</button>
+          </div>
+        </div>
+      </div>
+    </section>
 
-          <template v-else>
-            <NewsCard
-              v-for="berita in filteredBerita"
-              :key="berita.id"
-              v-bind="berita"
-              data-aos="fade-up"
-            />
-          </template>
+    <!-- News List Section -->
+    <section class="news-section">
+      <div class="container">
+        <div v-if="isLoading" class="loading-state">
+          <div class="spinner"></div>
+          <p>Memuat kabar terbaru untuk Anda...</p>
         </div>
 
-        <!-- Empty State -->
-        <div v-if="!isLoading && filteredBerita.length === 0" class="empty-state" data-aos="fade-up">
+        <div v-else-if="newsList.length === 0" class="empty-state">
           <i class="fa-solid fa-newspaper"></i>
-          <h3>Berita tidak ditemukan</h3>
-          <p>Coba gunakan kata kunci lain atau pilih kategori yang berbeda.</p>
-          <button @click="searchQuery = ''; activeCategory = ''" class="btn-reset">Lihat Semua Berita</button>
+          <h3>Belum ada berita yang diterbitkan.</h3>
+          <p>Nantikan informasi terbaru dari kami segera.</p>
+        </div>
+
+        <div v-else class="news-grid">
+          <div 
+            v-for="news in newsList" 
+            :key="news.id" 
+            class="news-card"
+            data-aos="fade-up"
+          >
+            <div class="news-card__img">
+              <img :src="news.thumbnail || 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=800'" alt="News Image" />
+              <div class="news-card__category">{{ news.category || 'Umum' }}</div>
+            </div>
+            <div class="news-card__body">
+              <span class="news-card__date">
+                <i class="fa-regular fa-calendar-check"></i>
+                {{ new Date(news.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) }}
+              </span>
+              <h3>{{ news.title }}</h3>
+              <p>{{ stripHtml(news.content).substring(0, 120) }}...</p>
+              <router-link :to="`/berita/${news.slug}`" class="news-card__link">
+                Baca Selengkapnya <i class="fa-solid fa-arrow-right-long"></i>
+              </router-link>
+            </div>
+          </div>
         </div>
       </div>
     </section>
   </div>
 </template>
 
-<style scoped>
-.berita-view {
-  min-height: 100vh;
+<style lang="scss" scoped>
+@use "../assets/sass/base/variables" as *;
+
+.berita-page {
+  background: #fff;
 }
 
-.container {
-  max-width: 120rem;
-  margin: 0 auto;
-  padding: 0 2rem;
-}
-
-/* Hero */
-.berita-hero {
-  height: 60vh;
+.hero-section {
+  min-height: 80vh;
+  position: relative;
+  background-image: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=2000');
   background-size: cover;
   background-position: center;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  color: #fff;
+  justify-content: center;
   text-align: center;
-}
-
-.berita-hero__badge {
-  display: inline-block;
-  padding: 0.8rem 2.5rem;
-  background: rgba(85, 197, 122, 0.2);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50px;
-  font-size: 1.3rem;
-  font-weight: 700;
   color: #fff;
-  margin-bottom: 3rem;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
+  padding: 15rem 2rem 12rem; /* Tambah padding top agar tidak tertutup navbar */
+
+  .hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%);
+    z-index: 1;
+  }
+
+  .container {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 120rem;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    background: rgba(85, 197, 122, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 3.5rem;
+    color: #fff;
+  }
+
+  .hero-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(4rem, 8vw, 8.5rem);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 3.5rem;
+    letter-spacing: -3px;
+    text-shadow: 0 10px 30px rgba(0,0,0,0.3);
+
+    span {
+      font-family: 'Playfair Display', serif;
+      font-weight: 400;
+      font-style: italic;
+      opacity: 0.95;
+      letter-spacing: 0;
+    }
+  }
+
+  .hero-subtitle {
+    font-size: 2.2rem;
+    max-width: 85rem;
+    margin: 0 auto;
+    opacity: 0.95;
+    line-height: 1.6;
+    text-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
 }
 
-.heading-academic {
-  font-family: 'Playfair Display', serif;
-  font-size: 6.5rem;
-  font-weight: 900;
-  line-height: 1.1;
-  margin-bottom: 2.5rem;
-}
-
-.heading-academic span {
-  font-style: italic;
-  font-weight: 400;
-  display: block;
-  font-size: 5rem;
-  margin-top: 1rem;
-}
-
-.berita-hero__sub {
-  font-size: 2.2rem;
-  max-width: 80rem;
-  margin: 0 auto;
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 300;
-  line-height: 1.6;
-}
-
-.filter-wrapper {
-  margin-top: -6rem; /* Lebih dalam ke arah Hero untuk efek layering yang kuat */
-  position: relative;
-  z-index: 100;
+.search-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
   display: flex;
   justify-content: center;
-  padding: 0 2rem;
+  z-index: 100;
 }
 
-.filter-bar {
-  display: flex;
-  gap: 2.5rem; /* Menambah jarak antar elemen input */
+.search-box-wrapper {
+  width: 90%;
+  max-width: 110rem;
+  transform: translateY(50%); /* Half-overlap with the next section */
+}
+
+.search-box {
   background: #fff;
-  padding: 1.8rem 3.5rem; /* Padding lebih luas untuk kesan lega */
-  border-radius: 100px; /* Lebih membulat sempurna */
-  box-shadow: 0 3rem 6rem rgba(0, 0, 0, 0.12);
+  padding: 1.5rem;
+  border-radius: 25px;
+  box-shadow: 0 2rem 5rem rgba(0,0,0,0.15);
+  display: flex;
   align-items: center;
-  width: 100%;
-  max-width: 100rem; /* Sedikit lebih lebar */
+  gap: 1.5rem;
+
+  @include respond("phone") {
+    flex-direction: column;
+    border-radius: 20px;
+  }
+
+  .search-input-group {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0 2rem;
+
+    .search-icon {
+      color: #55c57a;
+      font-size: 2rem;
+    }
+
+    input {
+      width: 100%;
+      border: none;
+      padding: 1.5rem 0;
+      font-size: 1.6rem;
+      color: #333;
+      &:focus { outline: none; }
+    }
+  }
+
+  .search-filter {
+    border-left: 1px solid #eee;
+    padding: 0 2rem;
+
+    select {
+      border: none;
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #666;
+      background: none;
+      cursor: pointer;
+      &:focus { outline: none; }
+    }
+
+    @include respond("phone") {
+      border-left: none;
+      border-top: 1px solid #eee;
+      width: 100%;
+      padding: 1.5rem 2rem;
+    }
+  }
+
+  .btn-search {
+    padding: 1.8rem 4rem;
+    background: #55c57a;
+    color: #fff;
+    border: none;
+    border-radius: 18px;
+    font-size: 1.6rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.3s;
+
+    &:hover {
+      background: #4ab46d;
+      transform: scale(1.05);
+      box-shadow: 0 1rem 2rem rgba(85, 197, 122, 0.3);
+    }
+  }
 }
 
-.search-icon {
-  color: #55c57a; /* Warna hijau brand agar lebih menonjol */
-  margin-left: 0.5rem;
-  font-size: 1.8rem;
-}
+.news-section {
+  padding: 18rem 0 15rem;
 
-.search-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  font-size: 1.7rem; /* Sedikit lebih besar untuk keterbacaan */
-  color: #2d3436;
-  background: transparent;
-  min-width: 15rem;
-  font-weight: 500;
-}
-
-.divider {
-  width: 1px;
-  height: 4rem; /* Lebih tinggi agar seimbang dengan padding baru */
-  background-color: #f1f1f1;
-}
-
-.category-select {
-  border: none;
-  outline: none;
-  font-size: 1.6rem;
-  color: #636e72;
-  background: transparent;
-  cursor: pointer;
-  padding: 0 1.5rem;
-  font-weight: 600;
-}
-
-.btn-search {
-  padding: 1.5rem 4.5rem; /* Padding tombol lebih mantap */
-  border-radius: 50px;
-  border: none;
-  background: linear-gradient(135deg, #55c57a 0%, #33ab5a 100%);
-  color: white;
-  font-weight: 700;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 1rem 2rem rgba(85, 197, 122, 0.3);
-}
-
-.btn-search:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 1.5rem 3rem rgba(85, 197, 122, 0.4);
-}
-
-.section-berita {
-  padding: 12rem 0 10rem; /* Jarak atas bawah lebih lega */
-  max-width: 120rem;
-  margin: 0 auto;
+  .container {
+    max-width: 120rem;
+    margin: 0 auto;
+    padding: 0 3rem;
+  }
 }
 
 .news-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(32rem, 1fr));
-  gap: 4rem;
+  grid-template-columns: repeat(auto-fill, minmax(35rem, 1fr));
+  gap: 5rem;
 }
 
-/* Skeleton Loading styles */
-.skeleton-news {
+.news-card {
   background: #fff;
-  border-radius: 12px;
+  border-radius: 30px;
   overflow: hidden;
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1rem 4rem rgba(0,0,0,0.05);
+  transition: all 0.4s;
+  display: flex;
+  flex-direction: column;
+
+  &:hover {
+    transform: translateY(-1.5rem);
+    box-shadow: 0 3rem 6rem rgba(85, 197, 122, 0.15);
+  }
+
+  &__img {
+    height: 25rem;
+    position: relative;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: all 0.6s;
+    }
+
+    .news-card__category {
+      position: absolute;
+      bottom: 2rem;
+      left: 2rem;
+      padding: 0.8rem 1.8rem;
+      background: #55c57a;
+      color: #fff;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
+
+  &:hover &__img img {
+    transform: scale(1.1);
+  }
+
+  &__body {
+    padding: 4rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    .news-card__date {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 1.4rem;
+      color: #999;
+      font-weight: 600;
+      margin-bottom: 2rem;
+
+      i { color: #55c57a; }
+    }
+
+    h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 800;
+      line-height: 1.3;
+      color: #333;
+      margin-bottom: 2rem;
+    }
+
+    p {
+      font-size: 1.6rem;
+      color: #666;
+      line-height: 1.7;
+      margin-bottom: 3rem;
+      flex: 1;
+    }
+
+    .news-card__link {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      text-decoration: none;
+      color: #55c57a;
+      font-size: 1.6rem;
+      font-weight: 800;
+      transition: all 0.3s;
+
+      &:hover {
+        gap: 2rem;
+        color: #333;
+      }
+    }
+  }
 }
 
-.skeleton-img {
-  height: 22rem;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
-}
-
-.skeleton-content {
-  padding: 2.5rem;
-}
-
-.skeleton-line {
-  height: 1.5rem;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
-  margin-bottom: 1.5rem;
-  border-radius: 4px;
-}
-
-.skeleton-line.sm { width: 30%; }
-.skeleton-line.md { width: 60%; }
-.skeleton-line.lg { width: 90%; }
-
-@keyframes loading {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-/* Empty State */
-.empty-state {
+.loading-state, .empty-state {
   text-align: center;
   padding: 10rem 0;
-  color: #999;
-}
-
-.empty-state i {
-  font-size: 8rem;
-  margin-bottom: 2rem;
-  opacity: 0.3;
-}
-
-.empty-state h3 {
-  font-size: 2.4rem;
-  color: #333;
-  margin-bottom: 1rem;
-}
-
-.btn-reset {
-  margin-top: 3rem;
-  padding: 1.2rem 3rem;
-  background: #55c57a;
-  color: #fff;
-  border: none;
-  border-radius: 50px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-/* Responsivitas */
-@media (max-width: 768px) {
-  .section-berita {
-    padding: 8rem 2rem 5rem;
-  }
   
-  .filter-bar {
-    flex-wrap: wrap;
-    border-radius: 20px;
-    padding: 2rem;
-  }
-  
-  .divider {
-    display: none;
-  }
-  
-  .btn-search {
-    width: 100%;
-  }
+  i { font-size: 10rem; color: #eee; margin-bottom: 3rem; }
+  h3 { font-size: 3rem; font-weight: 800; margin-bottom: 1.5rem; }
+  p { font-size: 1.8rem; color: #999; }
+}
 
-  .heading-academic {
-    font-size: 4rem;
-  }
+.spinner {
+  width: 7rem;
+  height: 7rem;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #55c57a;
+  border-radius: 50%;
+  margin: 0 auto 3rem;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>

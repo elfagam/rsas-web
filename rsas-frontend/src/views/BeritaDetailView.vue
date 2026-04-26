@@ -1,613 +1,542 @@
 <script setup>
-import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
+import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import api from '../services/api';
 
 const route = useRoute();
 const router = useRouter();
 const isLoading = ref(true);
 const news = ref(null);
 const scrollProgress = ref(0);
+const relatedNews = ref([]);
 
-// Helper untuk resolusi gambar dinamis
-const getImageUrl = (name) => {
-  return new URL(`../assets/img/${name}`, import.meta.url).href;
-};
-
-// Simulasi Database (Idealnya diambil dari API berdasarkan route.params.id)
-const allNews = [
-  {
-    id: 1,
-    kategori: "PENGUMUMAN",
-    tanggal: "25 April 2026",
-    judul: "Perkuat Mutu Pelayanan, Kemenkes RI Verifikasi Standarisasi RSUD",
-    ringkasan: "Kementerian Kesehatan RI melakukan verifikasi lapangan terhadap standar kualitas pelayanan di RSUD Prof. Dr. H. Aloei Saboe.",
-    konten: `
-      <p>GORONTALO - Kementerian Kesehatan Republik Indonesia melakukan kunjungan kerja dalam rangka verifikasi lapangan terhadap standar kualitas pelayanan di RSUD Prof. Dr. H. Aloei Saboe.</p>
-      <p>Kunjungan ini bertujuan untuk memastikan bahwa setiap unit layanan telah memenuhi Standar Pelayanan Minimal (SPM) yang ditetapkan secara nasional. Tim verifikator meninjau langsung beberapa unit vital seperti IGD Terpadu, Pusat Jantung, dan Laboratorium.</p>
-      <blockquote>"Kualitas pelayanan adalah prioritas utama kami. Verifikasi ini membantu kami mengidentifikasi area yang perlu ditingkatkan untuk kepuasan pasien yang lebih baik," ujar perwakilan manajemen RSAS.</blockquote>
-      <p>Hasil dari verifikasi ini diharapkan dapat mempertahankan akreditasi paripurna yang telah diraih oleh RSUD Aloei Saboe selama beberapa tahun terakhir.</p>
-    `,
-    gambar: "nat-1-large.jpg",
-    author: "Humas RSAS",
-    tags: ["Kemenkes", "Pelayanan", "Verifikasi"]
-  },
-  {
-    id: 2,
-    kategori: "LAYANAN",
-    tanggal: "24 April 2026",
-    judul: "Pelayanan Tetap Optimal, RSUD Prof. Dr. H. Aloei Saboe Pastikan Kesiapan SDM",
-    ringkasan: "Manajemen RSAS memastikan seluruh layanan kesehatan tetap berjalan 24 jam penuh selama libur panjang.",
-    konten: `
-      <p>Menjelang libur panjang, manajemen RSUD Prof. Dr. H. Aloei Saboe memastikan bahwa seluruh layanan kesehatan akan tetap berjalan selama 24 jam penuh.</p>
-      <p>Pengaturan jadwal piket tenaga medis, termasuk dokter spesialis on-call, telah disiapkan untuk mengantisipasi lonjakan pasien di unit gawat darurat.</p>
-      <p>Selain pelayanan medis, unit penunjang seperti farmasi dan kasir juga tetap beroperasi normal guna memudahkan masyarakat Gorontalo dalam mendapatkan akses kesehatan tanpa hambatan.</p>
-    `,
-    gambar: "nat-2-large.jpg",
-    author: "Redaksi RSAS",
-    tags: ["Libur Nasional", "SDM", "Layanan"]
-  },
-  {
-    id: 3,
-    kategori: "KESEHATAN",
-    tanggal: "22 April 2026",
-    judul: "Tips Menjaga Kesehatan Jantung di Usia Produktif",
-    ringkasan: "Pusat Jantung RSAS berbagi tips sederhana untuk menjaga kesehatan kardiovaskular bagi pekerja muda.",
-    konten: `
-      <p>Penyakit jantung tidak lagi hanya menyerang usia lanjut. Pola hidup tidak sehat membuat usia produktif kini rentan terhadap masalah kardiovaskular.</p>
-      <p>Pusat Jantung RSUD Prof. Dr. H. Aloei Saboe menyarankan pola makan seimbang, rutin berolahraga minimal 30 menit sehari, dan melakukan check-up rutin untuk mendeteksi dini faktor risiko.</p>
-    `,
-    gambar: "nat-3-large.jpg",
-    author: "dr. Andi Specialist",
-    tags: ["Jantung", "Tips Sehat", "Edukasi"]
-  },
-  {
-    id: 4,
-    kategori: "INOVASI",
-    tanggal: "20 April 2026",
-    judul: "RSUD Aloei Saboe Luncurkan Sistem Pendaftaran Online Terbaru",
-    ringkasan: "Memudahkan pasien, RSAS kini menghadirkan aplikasi pendaftaran online dengan fitur antrean real-time.",
-    konten: `
-      <p>Transformasi digital terus dilakukan oleh RSUD Prof. Dr. H. Aloei Saboe. Kini, masyarakat bisa melakukan pendaftaran rawat jalan melalui aplikasi mobile.</p>
-      <p>Sistem baru ini diharapkan dapat memangkas waktu tunggu di loket pendaftaran secara signifikan dan memberikan kenyamanan lebih bagi pasien.</p>
-    `,
-    gambar: "nat-4.jpg",
-    author: "Tim IT RSAS",
-    tags: ["Digital", "Inovasi", "Layanan"]
-  }
-];
-
-// Menghitung Berita Terkait (3 berita lain)
-const relatedNews = computed(() => {
-  if (!news.value) return [];
-  return allNews
-    .filter(item => item.id !== news.value.id)
-    .slice(0, 3);
-});
-
-// Update SEO (Title & Schema)
-const updateSEO = (article) => {
-  if (!article) return;
-  
-  // Title
-  document.title = `${article.judul} | RSUD Prof. Dr. H. Aloei Saboe`;
-
-  // JSON-LD Schema
-  const schemaId = 'news-article-schema';
-  let script = document.getElementById(schemaId);
-  if (!script) {
-    script = document.createElement('script');
-    script.id = schemaId;
-    script.type = 'application/ld+json';
-    document.head.appendChild(script);
-  }
-
-  const schemaData = {
-    "@context": "https://schema.org",
-    "@type": "NewsArticle",
-    "headline": article.judul,
-    "image": [getImageUrl(article.gambar)],
-    "datePublished": article.tanggal, // Idealnya format ISO
-    "author": [{
-      "@type": "Organization",
-      "name": "RSUD Prof. Dr. H. Aloei Saboe",
-      "url": window.location.origin
-    }]
-  };
-  
-  script.text = JSON.stringify(schemaData);
-};
-
-// Tracking Scroll Progress
-const updateScrollProgress = () => {
-  const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-  const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-  const scrolled = (winScroll / height) * 100;
-  scrollProgress.value = scrolled;
-};
-
-// Fungsi untuk Load Data Berita
-const fetchNewsData = () => {
+const fetchNewsDetail = async () => {
   isLoading.value = true;
-  window.scrollTo(0, 0); // Scroll ke atas setiap ganti berita
-  
-  const newsId = parseInt(route.params.id);
-  
-  setTimeout(() => {
-    const found = allNews.find(item => item.id === newsId);
-    if (found) {
-      news.value = found;
-      updateSEO(found);
-    } else {
-      console.warn("Berita tidak ditemukan!");
-      news.value = null;
-    }
+  window.scrollTo(0, 0);
+  try {
+    const slug = route.params.slug;
+    const response = await api.get(`/public/news/${slug}`);
+    news.value = response.data.data;
+    document.title = `${news.value.title} | RSUD Prof. Dr. H. Aloei Saboe`;
+    fetchRelatedNews();
+  } catch (error) {
+    console.error('Failed to fetch news detail:', error);
+    router.push('/berita');
+  } finally {
     isLoading.value = false;
-  }, 600); // Sedikit lebih cepat untuk UX navigasi antar berita
+  }
 };
 
-// Pantau perubahan ID di URL (untuk navigasi berita terkait)
-watch(() => route.params.id, (newId) => {
-  if (newId) fetchNewsData();
-});
+const fetchRelatedNews = async () => {
+  try {
+    const res = await api.get('/public/news');
+    relatedNews.value = res.data.data
+      .filter(item => item.id !== news.value?.id)
+      .slice(0, 3);
+  } catch (error) {
+    console.error('Failed to fetch related news:', error);
+  }
+};
+
+const updateScrollProgress = () => {
+  const h = document.documentElement;
+  const b = document.body;
+  const st = 'scrollTop';
+  const sh = 'scrollHeight';
+  scrollProgress.value = (h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight) * 100;
+};
+
+const downloadMainImage = async () => {
+  if (!news.value?.thumbnail) return;
+  const imageUrl = news.value.thumbnail;
+  const fileName = `RSAS-${news.value.slug}.jpg`;
+  try {
+    const response = await fetch(imageUrl);
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    window.open(imageUrl, '_blank');
+  }
+};
+
+const scrollToContent = () => {
+  const contentSection = document.querySelector('.article-body');
+  if (contentSection) {
+    contentSection.scrollIntoView({ behavior: 'smooth' });
+  }
+};
 
 onMounted(() => {
+  fetchNewsDetail();
   window.addEventListener('scroll', updateScrollProgress);
-  fetchNewsData();
 });
 
 onUnmounted(() => {
   window.removeEventListener('scroll', updateScrollProgress);
-  // Cleanup Schema
-  const script = document.getElementById('news-article-schema');
-  if (script) script.remove();
+});
+
+watch(() => route.params.slug, () => {
+  fetchNewsDetail();
 });
 </script>
 
 <template>
   <div class="news-detail-page">
-    <!-- Reading Progress Bar -->
     <div class="reading-progress-container">
       <div class="reading-progress-bar" :style="{ width: scrollProgress + '%' }"></div>
     </div>
 
-    <div class="container" v-if="isLoading">
-      <div class="skeleton-detail">
-        <div class="skeleton-line skeleton-line--title"></div>
-        <div class="skeleton-line skeleton-line--meta"></div>
-        <div class="skeleton-img"></div>
-        <div class="skeleton-line"></div>
-        <div class="skeleton-line"></div>
-        <div class="skeleton-line" style="width: 60%"></div>
-      </div>
-    </div>
+    <template v-if="news">
+      <!-- Hybrid Hero (Image Only) -->
+      <section class="hybrid-hero">
+        <div class="hybrid-hero__bg" :style="{ backgroundImage: `url(${news.thumbnail || 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=2000'})` }"></div>
+      </section>
 
-    <template v-else-if="news">
-      <!-- Breadcrumbs -->
-      <nav class="breadcrumb">
-        <div class="container">
-          <router-link to="/">Beranda</router-link>
-          <span class="separator">&raquo;</span>
-          <router-link to="/berita">Berita</router-link>
-          <span class="separator">&raquo;</span>
-          <span class="current">{{ news.judul }}</span>
-        </div>
-      </nav>
-
-      <article class="article">
+      <!-- Floating Title Card -->
+      <header class="hybrid-header">
         <div class="container container--narrow">
-          <header class="article__header">
-            <div class="article__meta">
-              <span class="article__category">{{ news.kategori }}</span>
-              <span class="article__date">{{ news.tanggal }}</span>
-            </div>
-            <h1 class="article__title">{{ news.judul }}</h1>
-            <div class="article__author">
-              Oleh: <strong>{{ news.author }}</strong>
-            </div>
-          </header>
+          <div class="hybrid-card" data-aos="fade-up">
+            <nav class="breadcrumb-hybrid">
+              <router-link to="/">Home</router-link>
+              <span class="sep">/</span>
+              <router-link to="/berita">Berita</router-link>
+              <span class="sep">/</span>
+              <span class="cur">Detail</span>
+            </nav>
 
-          <figure class="article__img-box">
-            <img :src="getImageUrl(news.gambar)" :alt="news.judul" class="article__img" />
-          </figure>
-
-          <div class="article__content" v-html="news.konten"></div>
-
-          <footer class="article__footer">
-            <div class="article__tags">
-              <span v-for="tag in news.tags" :key="tag" class="tag">#{{ tag }}</span>
+            <div class="article-meta">
+              <span class="badge">{{ news.category || 'Kesehatan' }}</span>
+              <span class="date">
+                <i class="fa-regular fa-calendar-check"></i>
+                {{ new Date(news.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) }}
+              </span>
             </div>
-            <div class="article__share">
-              <span>Bagikan Berita:</span>
-              <div class="share-links">
-                <a href="#" title="Bagikan ke Facebook"><i class="fa-brands fa-facebook"></i></a>
-                <a href="#" title="Bagikan ke WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
-                <a href="#" title="Bagikan ke Twitter"><i class="fa-brands fa-twitter"></i></a>
+            
+            <h1 class="article-title">{{ news.title }}</h1>
+            
+            <div class="article-author">
+              <div class="author-info">
+                <span class="by">Publikasi Oleh:</span>
+                <span class="name">Humas RSAS Gorontalo</span>
+              </div>
+            </div>
+
+            <!-- Action Button Corner -->
+            <button @click="scrollToContent" class="card-action-btn" title="Mulai Membaca">
+              <i class="fa-solid fa-chevron-down"></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content Area -->
+      <main class="article-body">
+        <div class="container container--narrow">
+          <article class="article-content" v-html="news.content" data-aos="fade-up"></article>
+
+          <!-- Article Actions & Footer -->
+          <footer class="article-footer" data-aos="fade-up">
+            <div class="article-actions">
+              <button @click="downloadMainImage" class="btn-download">
+                <i class="fa-solid fa-cloud-arrow-down"></i> Unduh Infografis
+              </button>
+            </div>
+            
+            <div class="share-box">
+              <span class="share-label">Bagikan:</span>
+              <div class="share-buttons">
+                <a href="#" class="share-btn fb"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" class="share-btn wa"><i class="fa-brands fa-whatsapp"></i></a>
+                <a href="#" class="share-btn tw"><i class="fa-brands fa-x-twitter"></i></a>
               </div>
             </div>
           </footer>
 
           <!-- Related News Section -->
-          <section class="related-news">
-            <h3 class="related-news__title">Berita Terkait</h3>
-            <div class="related-news__grid">
+          <section v-if="relatedNews.length > 0" class="related-section" data-aos="fade-up">
+            <h3 class="section-title">Berita <span>Terkait</span></h3>
+            <div class="related-grid">
               <router-link 
                 v-for="item in relatedNews" 
                 :key="item.id" 
-                :to="'/berita/' + item.id"
+                :to="'/berita/' + item.slug"
                 class="related-card"
               >
-                <div class="related-card__img-box">
-                  <img :src="getImageUrl(item.gambar)" :alt="item.judul">
+                <div class="related-card__img">
+                  <img :src="item.thumbnail || 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&q=80&w=400'" alt="Related">
                 </div>
                 <div class="related-card__info">
-                  <span class="related-card__category">{{ item.kategori }}</span>
-                  <h4 class="related-card__judul">{{ item.judul }}</h4>
+                  <span class="cat">{{ item.category }}</span>
+                  <h4>{{ item.title }}</h4>
                 </div>
               </router-link>
             </div>
           </section>
-
-          <div class="article__navigation">
-            <router-link to="/berita" class="btn-back">
-              &larr; Kembali ke Daftar Berita
-            </router-link>
-          </div>
         </div>
-      </article>
+      </main>
     </template>
 
-    <div v-else class="container u-center-text">
-       <h2>Maaf, Berita tidak ditemukan.</h2>
-       <router-link to="/berita" class="btn-back">Kembali</router-link>
+    <div v-else-if="isLoading" class="loading-full">
+      <div class="spinner"></div>
+      <p>Memuat konten premium...</p>
     </div>
   </div>
 </template>
 
-<style scoped>
-/* Reading Progress Bar */
+<style lang="scss" scoped>
+@use "../assets/sass/base/variables" as *;
+
+.news-detail-page {
+  background: #f8f9fa; /* Background sedikit abu-abu agar kartu putih menonjol */
+  min-height: 100vh;
+}
+
+/* Containers */
+.container--narrow {
+  max-width: 90rem;
+  margin: 0 auto;
+  padding: 0 4rem;
+}
+
+/* Reading Progress */
 .reading-progress-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 4px;
-  z-index: 1001;
-  background: transparent;
+  z-index: 9999;
 }
-
 .reading-progress-bar {
   height: 100%;
-  background: linear-gradient(to right, #55c57a, #28b485);
-  width: 0%;
-  transition: width 0.1s ease-out;
+  background: linear-gradient(to right, #55c57a, #2ecc71);
 }
 
-.news-detail-page {
-  padding-top: 8rem; 
-  background-color: #fff;
-  min-height: 100vh;
-}
-
-.container {
-  max-width: 120rem;
-  margin: 0 auto;
-  padding: 0 2rem;
-}
-
-.container--narrow {
-  max-width: 85rem; /* Sedikit lebih sempit untuk readability maksimal */
-}
-
-.breadcrumb {
-  padding: 3rem 0;
-  font-size: 1.4rem;
-  color: #888;
-}
-
-.breadcrumb a {
-  color: #55c57a;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.breadcrumb a:hover {
-  color: #28b485;
-}
-
-.breadcrumb .separator {
-  margin: 0 1.2rem;
-}
-
-.breadcrumb .current {
-  color: #444;
-  font-weight: 600;
-}
-
-.article {
-  padding-bottom: 8rem;
-}
-
-.article__header {
-  margin-bottom: 4rem;
-}
-
-.article__meta {
-  display: flex;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-  font-size: 1.4rem;
-  font-weight: 700;
-}
-
-.article__category {
-  color: #55c57a;
-  background-color: rgba(85, 197, 122, 0.1);
-  padding: 0.2rem 1.2rem;
-  border-radius: 50px;
-  text-transform: uppercase;
-}
-
-.article__date {
-  color: #999;
-  display: flex;
-  align-items: center;
-}
-
-.article__title {
-  font-size: 4.5rem;
-  line-height: 1.1;
-  color: #1a1a1a;
-  margin-bottom: 2.5rem;
-  font-weight: 900;
-  letter-spacing: -1px;
-}
-
-.article__author {
-  font-size: 1.5rem;
-  color: #666;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid #f1f1f1;
-}
-
-.article__img-box {
-  margin: 4rem 0;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 3rem 6rem rgba(0, 0, 0, 0.1);
-}
-
-.article__img {
+/* Hybrid Hero */
+.hybrid-hero {
+  height: 60vh;
   width: 100%;
-  height: auto;
-  display: block;
-  transition: transform 0.5s;
+  overflow: hidden;
+  position: relative;
+
+  &__bg {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed; /* Parallax effect */
+  }
 }
 
-.article__img:hover {
-  transform: scale(1.02);
+/* Floating Card Header */
+.hybrid-header {
+  margin-top: -15rem; /* Menindih gambar di atas */
+  position: relative;
+  z-index: 10;
 }
 
-.article__content {
-  font-size: 1.9rem;
-  line-height: 1.9;
-  color: #333;
-  font-family: 'Inter', sans-serif;
+.hybrid-card {
+  background: rgba(255, 255, 255, 0.45); /* Jauh lebih transparan */
+  backdrop-filter: blur(40px) saturate(200%); /* Blur lebih dalam & saturasi lebih kuat */
+  -webkit-backdrop-filter: blur(40px) saturate(200%);
+  padding: 6rem;
+  border-radius: 40px;
+  box-shadow: 0 4rem 10rem rgba(0,0,0,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Border lebih tipis & halus */
+  animation: pulse-fade 4s infinite ease-in-out; /* Efek Fade pada Bayangan */
+  position: relative;
+  
+  .breadcrumb-hybrid {
+    display: flex;
+    gap: 1.2rem;
+    font-size: 1.3rem;
+    font-weight: 800; /* Lebih tebal */
+    margin-bottom: 3rem;
+    color: #888;
+    a { 
+      color: #2d8a4d; /* Hijau yang lebih kuat/gelap untuk teks */
+      text-decoration: none; 
+      text-shadow: 0 1px 2px rgba(255,255,255,0.8); /* Glow putih agar tidak tenggelam */
+      transition: 0.3s; 
+      &:hover { color: #55c57a; text-decoration: underline; } 
+    }
+    .sep { margin: 0 0.5rem; opacity: 0.5; }
+    .cur { color: #222; }
+  }
+
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+
+    .badge {
+      padding: 0.6rem 2rem;
+      background: #55c57a;
+      color: #fff;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .date {
+      font-size: 1.5rem;
+      color: #555; /* Sedikit lebih gelap agar teks abu-abu terbaca */
+      font-weight: 700;
+      i { 
+        margin-right: 0.8rem; 
+        color: #2d8a4d; /* Hijau yang lebih berani */
+        text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+      }
+    }
+  }
+
+  .article-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    color: #1a1a1a;
+    margin-bottom: 3.5rem;
+    letter-spacing: -2px;
+  }
+
+  .article-author {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid #f0f0f0;
+    
+    .author-info {
+      font-size: 1.5rem;
+      .by { color: #999; margin-right: 0.8rem; }
+      .name { font-weight: 800; color: #333; }
+    }
+  }
+
+  /* Action Button Corner */
+  .card-action-btn {
+    position: absolute;
+    bottom: 4rem;
+    right: 4rem;
+    width: 6rem;
+    height: 6rem;
+    background: #55c57a;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    cursor: pointer;
+    box-shadow: 0 1rem 3rem rgba(85, 197, 122, 0.4);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 15;
+
+    &:hover {
+      transform: translateY(-5px) scale(1.1);
+      background: #2d8a4d;
+      box-shadow: 0 1.5rem 4rem rgba(45, 138, 77, 0.5);
+    }
+
+    i {
+      animation: bounce 2s infinite;
+    }
+  }
 }
 
-.article__content :deep(p) {
-  margin-bottom: 3rem;
+@keyframes pulse-fade {
+  0% { box-shadow: 0 4rem 10rem rgba(0,0,0,0.2); }
+  50% { box-shadow: 0 4rem 12rem rgba(85, 197, 122, 0.25); }
+  100% { box-shadow: 0 4rem 10rem rgba(0,0,0,0.2); }
 }
 
-.article__content :deep(blockquote) {
-  border-left: 6px solid #55c57a;
-  padding: 3rem 4rem;
-  font-style: italic;
-  font-size: 2.2rem;
-  background-color: #f9fdfb;
-  margin: 5rem 0;
-  color: #222;
-  border-radius: 0 15px 15px 0;
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+  40% {transform: translateY(-5px);}
+  60% {transform: translateY(-3px);}
 }
 
-.article__footer {
+/* Article Body */
+.article-body {
+  padding: 6rem 0 12rem;
+  background: #fff; /* Konten utama tetap di latar putih */
+}
+
+.article-content {
+  font-family: 'Lato', sans-serif;
+  font-size: 2.1rem;
+  line-height: 1.75; /* Lebih tegas dan padat */
+  color: #222; /* Charcoal Deep untuk kesan mewah */
+
+  /* Drop Cap: Huruf Pertama Mewah */
+  & > p:first-of-type::first-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 8.5rem;
+    font-weight: 900;
+    float: left;
+    line-height: 1;
+    margin-right: 1.5rem;
+    margin-top: 0.5rem;
+    color: #55c57a;
+    text-shadow: 2px 2px 0px rgba(85, 197, 122, 0.1);
+  }
+
+  /* Headings yang Tegas */
+  :deep(h2), :deep(h3) {
+    font-family: 'Outfit', sans-serif;
+    color: #111;
+    font-weight: 800;
+    line-height: 1.2;
+    margin: 6rem 0 3rem;
+    letter-spacing: -1px;
+  }
+
+  :deep(h2) { font-size: 3.8rem; }
+  :deep(h3) { font-size: 3rem; }
+
+  :deep(p) { margin-bottom: 4rem; text-align: justify; }
+  
+  :deep(img) {
+    width: 100%;
+    border-radius: 25px;
+    margin: 6rem 0;
+    box-shadow: 0 4rem 8rem rgba(0,0,0,0.12);
+  }
+
+  :deep(blockquote) {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 2.8rem;
+    line-height: 1.6;
+    padding: 4rem 5rem;
+    border-left: 10px solid #55c57a;
+    background: #f9fdfb;
+    margin: 7rem 0;
+    color: #111;
+    border-radius: 0 25px 25px 0;
+    position: relative;
+
+    &::before {
+      content: '"';
+      position: absolute;
+      top: -2rem;
+      left: 2rem;
+      font-size: 10rem;
+      color: rgba(85, 197, 122, 0.1);
+      font-family: serif;
+    }
+  }
+
+  /* Filter Pembersih Spasi: Mencegah <br> atau <p> kosong merusak layout */
+  :deep(br + br) {
+    display: none; 
+  }
+
+  /* Sembunyikan paragraf yang sengaja dikosongkan atau hanya berisi <br> */
+  :deep(p:empty),
+  :deep(p:has(> br:only-child)) {
+    display: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* List Styling */
+  :deep(ul), :deep(ol) {
+    margin-bottom: 4rem;
+    padding-left: 3rem;
+    li { margin-bottom: 1.5rem; }
+  }
+}
+
+.article-footer {
   margin-top: 8rem;
-  padding: 4rem 0;
+  padding: 5rem 0;
   border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 3rem;
+  gap: 4rem;
+
+  .btn-download {
+    padding: 1.6rem 3.5rem;
+    background: #f8f9fa;
+    border: 2px solid #55c57a;
+    color: #55c57a;
+    border-radius: 50px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    transition: all 0.3s;
+    &:hover { background: #55c57a; color: #fff; transform: translateY(-5px); box-shadow: 0 1rem 3rem rgba(85, 197, 122, 0.2); }
+  }
+
+  .share-box {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    .share-label { font-weight: 800; font-size: 1.6rem; color: #333; }
+    .share-buttons {
+      display: flex;
+      gap: 1.2rem;
+      .share-btn {
+        width: 4.8rem;
+        height: 4.8rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f9fdfb;
+        color: #55c57a;
+        font-size: 1.8rem;
+        transition: all 0.3s;
+        &:hover { background: #55c57a; color: #fff; transform: translateY(-5px); }
+      }
+    }
+  }
 }
 
-.tag {
-  display: inline-block;
-  background-color: #f4f4f4;
-  padding: 0.6rem 1.5rem;
-  border-radius: 50px;
-  font-size: 1.3rem;
-  color: #555;
-  margin-right: 1rem;
-  transition: all 0.3s;
-  cursor: pointer;
+/* Related News */
+.related-section {
+  margin-top: 10rem;
+  .section-title { font-family: 'Outfit', sans-serif; font-size: 3rem; font-weight: 900; margin-bottom: 5rem; span { color: #55c57a; } }
+  .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(26rem, 1fr)); gap: 4rem; }
+  .related-card {
+    text-decoration: none; color: inherit;
+    &__img { height: 18rem; border-radius: 20px; overflow: hidden; margin-bottom: 2rem; img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; } }
+    &__info {
+      .cat { font-size: 1.2rem; font-weight: 800; color: #55c57a; text-transform: uppercase; margin-bottom: 0.8rem; display: block; }
+      h4 { font-size: 1.8rem; font-weight: 800; line-height: 1.4; color: #333; transition: 0.3s; }
+    }
+    &:hover { .related-card__img img { transform: scale(1.1); } h4 { color: #55c57a; } }
+  }
 }
 
-.tag:hover {
-  background-color: #55c57a;
-  color: #fff;
-}
-
-.article__share {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
-
-.article__share span {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #333;
-}
-
-.share-links {
-  display: flex;
-  gap: 1.5rem;
-}
-
-.share-links a {
-  font-size: 2.2rem;
-  color: #55c57a;
-  transition: all 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 4.5rem;
-  height: 4.5rem;
-  border-radius: 50%;
-  background-color: #f9fdfb;
-}
-
-.share-links a:hover {
-  transform: translateY(-3px);
-  background-color: #55c57a;
-  color: #fff;
-  box-shadow: 0 1rem 2rem rgba(85, 197, 122, 0.2);
-}
-
-/* Related News Section */
-.related-news {
-  margin-top: 8rem;
-}
-
-.related-news__title {
-  font-size: 2.4rem;
-  font-weight: 800;
-  margin-bottom: 3rem;
-  color: #1a1a1a;
-  position: relative;
-  display: inline-block;
-}
-
-.related-news__title::after {
-  content: "";
-  position: absolute;
-  bottom: -10px;
-  left: 0;
-  width: 50px;
-  height: 4px;
-  background-color: #55c57a;
-  border-radius: 2px;
-}
-
-.related-news__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 3rem;
-}
-
-.related-card {
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.3s;
-}
-
-.related-card:hover .related-card__judul {
-  color: #55c57a;
-}
-
-.related-card:hover .related-card__img-box img {
-  transform: scale(1.1);
-}
-
-.related-card__img-box {
-  aspect-ratio: 16/9;
-  border-radius: 12px;
-  overflow: hidden;
-  margin-bottom: 1.5rem;
-}
-
-.related-card__img-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.5s;
-}
-
-.related-card__category {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #55c57a;
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
-  display: block;
-}
-
-.related-card__judul {
-  font-size: 1.6rem;
-  line-height: 1.4;
-  font-weight: 700;
-  color: #333;
-}
-
-.article__navigation {
-  margin-top: 8rem;
-  text-align: center;
-}
-
-.btn-back {
-  display: inline-block;
-  padding: 1.5rem 3.5rem;
-  background-color: #fff;
-  border: 2px solid #55c57a;
-  color: #55c57a;
-  text-decoration: none;
-  font-size: 1.5rem;
-  font-weight: 700;
-  border-radius: 50px;
-  transition: all 0.3s;
-}
-
-.btn-back:hover {
-  background-color: #55c57a;
-  color: #fff;
-  box-shadow: 0 1.5rem 3rem rgba(85, 197, 122, 0.2);
-}
-
-/* Skeleton */
-.skeleton-line {
-  height: 2rem;
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
-  margin-bottom: 1.5rem;
-  border-radius: 4px;
-}
-
-.skeleton-line--title { height: 4rem; width: 80%; margin-bottom: 3rem; }
-.skeleton-line--meta { height: 1.5rem; width: 30%; margin-bottom: 4rem; }
-
-.skeleton-img {
-  height: 45rem;
-  background: #eee;
-  width: 100%;
-  border-radius: 20px;
-  margin-bottom: 5rem;
-}
-
-@keyframes loading {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
+/* Loading */
+.loading-full { height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2rem; .spinner { width: 5rem; height: 5rem; border: 4px solid #f3f3f3; border-top: 4px solid #55c57a; border-radius: 50%; animation: spin 1s linear infinite; } }
 
 @media (max-width: 900px) {
-  .related-news__grid { grid-template-columns: 1fr; }
-  .article__title { font-size: 3.5rem; }
+  .hybrid-card { padding: 3rem; border-radius: 20px; margin-top: -10rem; }
 }
 
 @media (max-width: 600px) {
-  .article__title { font-size: 2.8rem; }
-  .article__content { font-size: 1.7rem; }
-  .article__footer { flex-direction: column; align-items: flex-start; }
+  .article-title { font-size: 2.8rem; }
+  .article-content { font-size: 1.8rem; }
+  .article-footer { flex-direction: column; align-items: flex-start; }
 }
 </style>

@@ -6,6 +6,7 @@ import DoctorCard from '../components/ui/DoctorCard.vue';
 import NewsCard from '../components/ui/NewsCard.vue';
 import TestimonialSection from '../components/ui/TestimonialSection.vue';
 import TestimonialModal from '../components/ui/TestimonialModal.vue';
+import api from '../services/api';
 
 // Helper untuk resolusi gambar dinamis
 const getImageUrl = (name) => {
@@ -105,36 +106,32 @@ const filteredDokter = computed(() => {
   return filtered;
 });
 
-// Data Berita (Simulasi)
-const beritaTerbaru = ref([
-  {
-    id: 1,
-    kategori: 'PENGUMUMAN',
-    tanggal: '26 April 2026',
-    judul: 'Lapor Gratifikasi: Kenali dan Hindari',
-    ringkasan: 'RSUD Prof. Dr. H. Aloei Saboe berkomitmen penuh dalam pemberantasan korupsi...',
-    gambar: getImageUrl('nat-1.jpg'),
-    tautan: '/berita/1'
-  },
-  {
-    id: 2,
-    kategori: 'LAYANAN',
-    tanggal: '25 April 2026',
-    judul: 'Peresmian Gedung Rawat Inap Baru',
-    ringkasan: 'Untuk meningkatkan kenyamanan pasien, manajemen RSAS telah meresmikan fasilitas rawat inap VIP...',
-    gambar: getImageUrl('nat-2.jpg'),
-    tautan: '/berita/2'
-  },
-  {
-    id: 3,
-    kategori: 'EDUKASI',
-    tanggal: '24 April 2026',
-    judul: 'Waspada Hipertensi: Si Pembunuh Senyap',
-    ringkasan: 'Kenali gejala dini hipertensi dan cara mengelolanya melalui pola makan sehat dan olahraga rutin untuk mencegah risiko stroke...',
-    gambar: getImageUrl('nat-3.jpg'),
-    tautan: '/berita/3'
+// Data Berita (Sekarang Dinamis)
+const beritaTerbaru = ref([]);
+
+const stripHtml = (html) => {
+  const tmp = document.createElement("DIV");
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || "";
+};
+
+const fetchNews = async () => {
+  try {
+    const response = await api.get('/public/news');
+    // Ambil maksimal 3 berita terbaru
+    beritaTerbaru.value = response.data.data.slice(0, 3).map(news => ({
+      id: news.id,
+      kategori: news.category || 'KESEHATAN',
+      tanggal: new Date(news.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
+      judul: news.title,
+      ringkasan: stripHtml(news.content).substring(0, 120),
+      gambar: news.thumbnail || getImageUrl('nat-1.jpg'),
+      tautan: `/berita/${news.slug}`
+    }));
+  } catch (error) {
+    console.error('Failed to fetch news:', error);
   }
-]);
+};
 
 // Data Sejarah
 const sejarahRSAS = ref([
@@ -163,6 +160,7 @@ const sejarahRSAS = ref([
 const isModalOpen = ref(false);
 
 onMounted(() => {
+  fetchNews();
   // Inisialisasi swiper jika diperlukan
 });
 </script>
@@ -182,17 +180,17 @@ onMounted(() => {
               alt="Direktur RSAS" 
               class="director-box__img"
             >
-            <div class="director-box__badge">Direktur Utama</div>
+            <div class="director-box__badge">Direktur</div>
           </div>
           <div class="director-box__content">
-            <h4 class="director-box__subtitle">Sambutan Pimpinan</h4>
+            <h4 class="director-box__subtitle">Sambutan Direktur</h4>
             <h2 class="director-box__title">Melayani dengan Hati, <br>Membangun Gorontalo Sehat</h2>
             <div class="director-box__divider"></div>
             <p class="director-box__text">
               "Selamat datang di portal digital RSUD Prof. Dr. H. Aloei Saboe. Sebagai rumah sakit rujukan utama dan rumah sakit pendidikan, kami berkomitmen untuk selalu menghadirkan inovasi medis terbaik yang dibalut dengan keramahan dan empati. Teknologi hanyalah alat, namun kemanusiaan adalah esensi dari kesembuhan."
             </p>
             <div class="director-box__info">
-              <span class="director-box__name">dr. H. Ahmad Lihu, M.Si</span>
+              <span class="director-box__name">ABDUL HAFIDZ</span>
               <span class="director-box__nip">NIP. 19700101 199503 1 001</span>
             </div>
             <router-link to="/profil" class="btn-text">Selengkapnya tentang kami &rarr;</router-link>
@@ -359,11 +357,11 @@ onMounted(() => {
            <div class="mitra-track">
              <!-- Kita ulangi seluruh rangkaian logo 2 kali untuk efek loop tanpa putus -->
              <template v-for="loop in 2" :key="loop">
-               <img :src="getImageUrl('bpjs.png')" alt="BPJS Kesehatan" class="mitra-logo" />
-               <img :src="getImageUrl('mandiri-inhealth.png')" alt="Mandiri Inhealth" class="mitra-logo" />
-               <img :src="getImageUrl('taspen.png')" alt="Taspen" class="mitra-logo" />
-               <img :src="getImageUrl('jasa-raharja.png')" alt="Jasa Raharja" class="mitra-logo" />
-               <img :src="getImageUrl('bpsj-ketenagakerjaan.png')" alt="BPJS Ketenagakerjaan" class="mitra-logo" />
+               <div class="mitra-item"><img :src="getImageUrl('bpjs.png')" alt="BPJS Kesehatan" class="mitra-logo" /></div>
+               <div class="mitra-item"><img :src="getImageUrl('mandiri-inhealth.png')" alt="Mandiri Inhealth" class="mitra-logo" /></div>
+               <div class="mitra-item"><img :src="getImageUrl('taspen.png')" alt="Taspen" class="mitra-logo" /></div>
+               <div class="mitra-item"><img :src="getImageUrl('jasa-raharja.png')" alt="Jasa Raharja" class="mitra-logo" /></div>
+               <div class="mitra-item"><img :src="getImageUrl('bpsj-ketenagakerjaan.png')" alt="BPJS Ketenagakerjaan" class="mitra-logo" /></div>
              </template>
            </div>
          </div>
@@ -536,7 +534,7 @@ onMounted(() => {
 }
 
 .director-box__text {
-  font-size: 1.3rem;
+  font-size: 1.55rem;
   font-style: italic;
   color: #666;
   line-height: 1.8;
@@ -718,23 +716,47 @@ onMounted(() => {
 
 .mitra-track {
   display: flex;
-  width: calc(250px * 20);
-  animation: scroll 40s linear infinite;
+  width: calc(300px * 20);
+  animation: scroll 60s linear infinite; /* Lebih pelan agar lebih mewah */
   align-items: center;
-  gap: 8rem;
+  gap: 5rem;
+}
+
+.mitra-item {
+  flex: 0 0 220px;
+  height: 110px;
+  background: #fff;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  box-shadow: 0 1rem 3rem rgba(0,0,0,0.05);
+  border: 1px solid #f0f0f0;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  
+  &:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 2rem 4rem rgba(85, 197, 122, 0.15);
+    border-color: rgba(85, 197, 122, 0.3);
+    
+    .mitra-logo {
+      filter: grayscale(0) opacity(1);
+    }
+  }
 }
 
 .mitra-logo {
-  height: 60px;
-  filter: grayscale(1) opacity(0.5);
-  transition: all 0.3s;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: grayscale(1) opacity(0.8); /* Lebih terlihat sejak awal */
+  transition: all 0.4s;
 }
-
-.mitra-logo:hover { filter: grayscale(0) opacity(1); transform: scale(1.1); }
 
 @keyframes scroll {
   0% { transform: translateX(0); }
-  100% { transform: translateX(calc(-250px * 10)); }
+  100% { transform: translateX(calc(-300px * 10 - 50rem)); }
 }
 
 /* Stats Grid */
